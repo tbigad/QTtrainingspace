@@ -16,11 +16,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     simplewindow.cpp \
     FramelessHelper.cpp \
-    FullscreenHelper.cpp
+    FullscreenHelper.cpp \
+    panel.cpp
 
 HEADERS  += mainwindow.h \
     simplewindow.h \
     FramelessHelper.h \
-    FullscreenHelper.h
+    FullscreenHelper.h \
+    panel.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    panel.ui

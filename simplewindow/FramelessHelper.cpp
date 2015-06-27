@@ -134,7 +134,7 @@ WidgetData::WidgetData( FramelessHelperImpl* _d, QWidget* topLevelWidget )
   bool visible = mWidget->isVisible();
 
   mWidget->setMouseTracking( true );
-  mWidget->setWindowFlags( Qt::CustomizeWindowHint|Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+  mWidget->setWindowFlags( Qt::CustomizeWindowHint|Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::NoDropShadowWindowHint);
   //Bug fix, mouse move events does not propagate from child widgets.
   //so need the hover events.
   mWidget->setAttribute( Qt::WA_Hover );

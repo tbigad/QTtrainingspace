@@ -4,13 +4,10 @@
 #include <QDebug>
 
 SimpleWindow::SimpleWindow(QWidget *parent)
-    : QWidget(parent, Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint|Qt::CustomizeWindowHint),
+    : QWidget(parent, Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint|Qt::CustomizeWindowHint|Qt::NoDropShadowWindowHint),
       mFrameless(new FramelessHelper)
 {
-    FullScreenHelper::MaximizeOnVirtualScreen(this);
-    setWindowOpacity(0.05);
-    setCursor(Qt::CrossCursor);
-    widgetCreated = false;
+    initialConfigurationWidget();
 }
 
 SimpleWindow::~SimpleWindow()
@@ -19,12 +16,14 @@ SimpleWindow::~SimpleWindow()
 
 void SimpleWindow::mousePressEvent(QMouseEvent *event)
 {
+
+    mLeftBtnPressed = true;
     switch (event->button()) {
     case Qt::LeftButton:
-        if(widgetCreated)
+        if(widgetCreated){
             return;
+        }
         mStartDragPos = event->globalPos();
-        mLeftBtnPressed = true;
         break;
     case Qt::RightButton:
         this->close();
@@ -45,28 +44,24 @@ void SimpleWindow::mouseMoveEvent(QMouseEvent *event)
 
 void SimpleWindow::mouseReleaseEvent(QMouseEvent *event)
 {
+    mLeftBtnPressed = false;
     if(widgetCreated){
         return;
-        mLeftBtnPressed = false;
     }
 
-    if((this->size().height()< 10) && (this->size().width()< 10) )
+      if((this->size().height()< 10) || (this->size().width()< 10) || (isWidgetResizeble == false) )
     {
-        this->showMaximized();
+        initialConfigurationWidget();
         return;
     }
-
-    if (!(this->isFullScreen() || this->isMaximized())){
-        mFrameless->activateOn(this);
-        mFrameless->setWidgetMovable(true);
-        mFrameless->setWidgetResizable(true);
-        widgetCreated = true;
+    if (isWidgetResizeble){
+            secondarySettingWidget(true,true);
     }
 }
 
 void SimpleWindow::setSizeWidget(QPoint moveMousePos)
 {
-    if(widgetCreated && mLeftBtnPressed)
+    if(widgetCreated)
         return;
 
     setWindowOpacity(0.5);
@@ -84,6 +79,7 @@ void SimpleWindow::setSizeWidget(QPoint moveMousePos)
         bottonRight.setY(mStartDragPos.y());
     }
 
+    isWidgetResizeble = true;
     QRect initRect(topLeft,bottonRight);
     setGeometry(initRect);
     raise();
@@ -91,10 +87,60 @@ void SimpleWindow::setSizeWidget(QPoint moveMousePos)
 
 void SimpleWindow::paintEvent(QPaintEvent *event)
 {
+    const QPen whitePen(Qt::white, 2);
+    const QPen blackPen(Qt::black, 2);
+
     QPainter paint(this);
-    QPen pen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-    paint.setPen(pen);
+    paint.setOpacity(1);
+
+    paint.setPen(whitePen);
     QRectF rec(rect().topLeft(),size());
-    paint.setOpacity(2);
     paint.drawRect(rec);
+
+    QString sizeStr;
+    paint.setPen(blackPen);
+    if(!widgetCreated)
+    {
+        QTextStream(&sizeStr)<<size().width()<<" x "<<size().height();
+        paint.drawText(rec.center(),sizeStr);
+    }
+}
+
+void SimpleWindow::resizeEvent(QResizeEvent *event)
+{
+
+
+}
+
+void SimpleWindow::initialConfigurationWidget()
+{
+    FullScreenHelper::MaximizeOnVirtualScreen(this);
+    setWindowOpacity(0.1);
+    setCursor(Qt::CrossCursor);
+    widgetCreated = false;
+    isWidgetResizeble = false;
+}
+
+void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetResizable)
+{
+    mFrameless->activateOn(this);
+    mFrameless->setWidgetMovable(setWidgetMovable);
+    mFrameless->setWidgetResizable(setWidgetResizable);
+    widgetCreated = true;
+    if(chekBox)
+    {
+        panel = std::make_shared<Panel>();
+        panel.get()->show();
+    }
+}
+
+void SimpleWindow::setChekBoxState(bool chekBoxState)
+{
+    chekBox = chekBoxState;
+}
+
+void SimpleWindow::closeEvent(QCloseEvent *event)
+{
+    if(chekBox)
+    panel.get()->close();
 }

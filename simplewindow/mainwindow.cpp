@@ -19,10 +19,10 @@ void MainWindow::on_pushButton_clicked()
         win.reset();
 
     win = std::make_shared<SimpleWindow>();
-
+    win->setChekBoxState(ui->checkBox->isChecked());
     win->show();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    win->close();
+    win.get()->close();
 }
