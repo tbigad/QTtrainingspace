@@ -8,6 +8,8 @@ SimpleWindow::SimpleWindow(QWidget *parent)
       mFrameless(new FramelessHelper)
 {
     initialConfigurationWidget();
+
+
 }
 
 SimpleWindow::~SimpleWindow()
@@ -129,7 +131,7 @@ void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetR
     widgetCreated = true;
     if(chekBox)
     {
-        panel = std::make_shared<Panel>();
+        panel = std::make_shared<Panel>(new Panel(this));
         panel.get()->show();
     }
 }

@@ -17,6 +17,11 @@ public:
 
 private:
     Ui::Panel *ui;
+private slots:
+    void cropBtnPressed();
+    void cancelBtnPressed();
+protected:
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // PANEL_H
