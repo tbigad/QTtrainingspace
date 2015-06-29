@@ -15,8 +15,6 @@ Panel::Panel(QWidget *parent) :
 
     connect(ui->CancelButton,SIGNAL(pressed()),this,SLOT(cancelBtnPressed()));
     connect(ui->CropButton, SIGNAL(pressed()), this, SLOT(cropBtnPressed()));
-
-
 }
 
 Panel::~Panel()

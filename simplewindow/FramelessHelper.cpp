@@ -39,6 +39,7 @@ private:
   void updateCursorShape( const QPoint& globalMousePos );
   void resizeWidget( const QPoint& globalMousePos );
   void moveWidget( const QPoint& globalMousePos );
+  void checkScreenEdge();
 
   void handleMousePressEvent( QMouseEvent* event );
   void handleMouseReleaseEvent( QMouseEvent* event );
@@ -329,6 +330,22 @@ void WidgetData::resizeWidget( const QPoint& globalMousePos )
 void WidgetData::moveWidget( const QPoint& globalMousePos )
 {
     mWidget->move( globalMousePos - mDragPos );
+    checkScreenEdge();
+}
+
+void WidgetData::checkScreenEdge()
+{
+    QRect sizeDesktop = QApplication::desktop()->geometry();
+    QRect frameGeo = mWidget->frameGeometry();
+    if(sizeDesktop.top() + frameGeo.top() <= 0)
+        mWidget->move(frameGeo.x(),0);
+    if(sizeDesktop.left()+frameGeo.left() <=0)
+        mWidget->move(0,frameGeo.y());
+    if(sizeDesktop.right()-frameGeo.right() <=0)
+        mWidget->move(sizeDesktop.right()-frameGeo.width(),frameGeo.y());
+    if(sizeDesktop.bottom()-frameGeo.bottom() <=0)
+        mWidget->move(frameGeo.x(),sizeDesktop.bottom()-frameGeo.height());
+
 }
 
 void WidgetData::handleMousePressEvent( QMouseEvent* event )
