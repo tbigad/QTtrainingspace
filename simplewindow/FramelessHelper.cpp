@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include <QMouseEvent>
 #include <QMutex>
+#include <QtMath>
 #include "FramelessHelper.h"
 
 class CursorPosCalculator
@@ -39,7 +40,7 @@ private:
   void updateCursorShape( const QPoint& globalMousePos );
   void resizeWidget( const QPoint& globalMousePos );
   void moveWidget( const QPoint& globalMousePos );
-  void checkScreenEdge();
+  void MoveInsideDesktop(const QPoint& globalMousePos);
 
   void handleMousePressEvent( QMouseEvent* event );
   void handleMouseReleaseEvent( QMouseEvent* event );
@@ -329,22 +330,26 @@ void WidgetData::resizeWidget( const QPoint& globalMousePos )
 
 void WidgetData::moveWidget( const QPoint& globalMousePos )
 {
-    mWidget->move( globalMousePos - mDragPos );
-    checkScreenEdge();
+    MoveInsideDesktop(globalMousePos);
 }
 
-void WidgetData::checkScreenEdge()
+void WidgetData::MoveInsideDesktop(const QPoint& globalMousePos)
 {
-    QRect sizeDesktop = QApplication::desktop()->geometry();
-    QRect frameGeo = mWidget->frameGeometry();
-    if(sizeDesktop.top() + frameGeo.top() <= 0)
-        mWidget->move(frameGeo.x(),0);
-    if(sizeDesktop.left()+frameGeo.left() <=0)
-        mWidget->move(0,frameGeo.y());
-    if(sizeDesktop.right()-frameGeo.right() <=0)
-        mWidget->move(sizeDesktop.right()-frameGeo.width(),frameGeo.y());
-    if(sizeDesktop.bottom()-frameGeo.bottom() <=0)
-        mWidget->move(frameGeo.x(),sizeDesktop.bottom()-frameGeo.height());
+    QRect desktopRect = QApplication::desktop()->geometry();
+    auto newPoition = globalMousePos - mDragPos;
+
+    auto newX = newPoition.x();
+    auto newY = newPoition.y();
+
+    auto maxX = desktopRect.width() - mWidget->width();
+    auto maxY = desktopRect.height() - mWidget->height();
+
+    if(newX < 0) newX = 0;
+    if(newY < 0) newY = 0;
+    if(newX > maxX) newX = maxX;
+    if(newY > maxY) newY = maxY;
+
+    mWidget->setGeometry(newX, newY, mWidget->width(), mWidget->height());
 
 }
 
