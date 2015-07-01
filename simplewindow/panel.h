@@ -2,6 +2,7 @@
 #define PANEL_H
 
 #include <QWidget>
+#include <FramelessHelper.h>
 
 namespace Ui {
 class Panel;
@@ -17,6 +18,7 @@ public:
 
 private:
     Ui::Panel *ui;
+    FramelessHelper* mFrameless;
 private slots:
     void cropBtnPressed();
     void cancelBtnPressed();

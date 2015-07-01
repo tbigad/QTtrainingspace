@@ -2,16 +2,23 @@
 #include "ui_panel.h"
 #include <QDesktopWidget>
 #include <QDebug>
+#include "FullscreenHelper.h"
 
 Panel::Panel(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Panel)
+    ui(new Ui::Panel), mFrameless(new FramelessHelper)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::Window);
+    FullScreenHelper::MaximizeOnVirtualScreen(this);
+
+    mFrameless->activateOn(this);
+    mFrameless->setWidgetMovable(true);
+
+    setWindowFlags(Qt::Drawer|Qt::CustomizeWindowHint);
     QPoint posOnDesktop = QApplication::desktop()->geometry().topRight();
     posOnDesktop.setX(posOnDesktop.x() - size().width());
     this->move(posOnDesktop);
+
 
     connect(ui->CancelButton,SIGNAL(pressed()),this,SLOT(cancelBtnPressed()));
     connect(ui->CropButton, SIGNAL(pressed()), this, SLOT(cropBtnPressed()));

@@ -17,13 +17,15 @@ SOURCES += main.cpp\
     simplewindow.cpp \
     FramelessHelper.cpp \
     FullscreenHelper.cpp \
-    panel.cpp
+    panel.cpp \
+    Magnifier.cpp
 
 HEADERS  += mainwindow.h \
     simplewindow.h \
     FramelessHelper.h \
     FullscreenHelper.h \
-    panel.h
+    panel.h \
+    Magnifier.h
 
 FORMS    += mainwindow.ui \
     panel.ui

@@ -8,8 +8,6 @@ SimpleWindow::SimpleWindow(QWidget *parent)
       mFrameless(new FramelessHelper)
 {
     initialConfigurationWidget();
-
-
 }
 
 SimpleWindow::~SimpleWindow()
@@ -26,6 +24,7 @@ void SimpleWindow::mousePressEvent(QMouseEvent *event)
             return;
         }
         mStartDragPos = event->globalPos();
+        magnifier = std::make_shared<Magnifier>(new Magnifier(this));
         break;
     case Qt::RightButton:
         this->close();
@@ -41,7 +40,9 @@ void SimpleWindow::mouseMoveEvent(QMouseEvent *event)
         return;
 
     if(mLeftBtnPressed)
+    {
     setSizeWidget(event->globalPos());
+    }
 }
 
 void SimpleWindow::mouseReleaseEvent(QMouseEvent *event)
@@ -57,7 +58,8 @@ void SimpleWindow::mouseReleaseEvent(QMouseEvent *event)
         return;
     }
     if (isWidgetResizeble){
-            secondarySettingWidget(true,true);
+        magnifier.get()->hide();
+        secondarySettingWidget(true,true);
     }
 }
 
@@ -84,6 +86,8 @@ void SimpleWindow::setSizeWidget(QPoint moveMousePos)
     isWidgetResizeble = true;
     QRect initRect(topLeft,bottonRight);
     setGeometry(initRect);
+    magnifier.get()->SetParentSize(size());
+    magnifier.get()->magnifierMove(&moveMousePos);
     raise();
 }
 
@@ -98,19 +102,10 @@ void SimpleWindow::paintEvent(QPaintEvent *event)
     paint.setPen(whitePen);
     QRectF rec(rect().topLeft(),size());
     paint.drawRect(rec);
-
-    QString sizeStr;
-    paint.setPen(blackPen);
-    if(!widgetCreated)
-    {
-        QTextStream(&sizeStr)<<size().width()<<" x "<<size().height();
-        paint.drawText(rec.center(),sizeStr);
-    }
 }
 
 void SimpleWindow::resizeEvent(QResizeEvent *event)
 {
-
 
 }
 
@@ -121,6 +116,7 @@ void SimpleWindow::initialConfigurationWidget()
     setCursor(Qt::CrossCursor);
     widgetCreated = false;
     isWidgetResizeble = false;
+
 }
 
 void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetResizable)
@@ -145,4 +141,8 @@ void SimpleWindow::closeEvent(QCloseEvent *event)
 {
     if(chekBox)
     panel.get()->close();
+    magnifier.reset();
 }
+
+
+

@@ -3,6 +3,7 @@
 
 #include "FramelessHelper.h"
 #include "panel.h"
+#include "Magnifier.h"
 
 #include <QWidget>
 #include <QMouseEvent>
@@ -20,6 +21,7 @@ public:
     void setChekBoxState(bool chekBoxState);
 private:
     FramelessHelper* mFrameless;
+    std::shared_ptr<Magnifier> magnifier;
     std::shared_ptr<Panel> panel;
     void setSizeWidget(QPoint moveMousePos);
 

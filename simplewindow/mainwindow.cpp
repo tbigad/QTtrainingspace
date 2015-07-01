@@ -24,5 +24,8 @@ void MainWindow::on_pushButton_clicked()
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+    if(!win)
+    return;
+
     win.get()->close();
 }
