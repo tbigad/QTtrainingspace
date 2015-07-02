@@ -92,6 +92,7 @@ void SimpleWindow::setSizeWidget(QPoint moveMousePos)
     magnifier.get()->magnifierMove(&moveMousePos);
 
     raise();
+
 }
 
 void SimpleWindow::paintEvent(QPaintEvent *event)
@@ -152,5 +153,9 @@ void SimpleWindow::closeEvent(QCloseEvent *event)
     magnifier.reset();
 }
 
+void SimpleWindow::setWidth(int w)
+{
+    this->size().setWidth(w);
+}
 
 

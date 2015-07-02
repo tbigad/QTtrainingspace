@@ -48,10 +48,10 @@ void Magnifier::paintEvent(QPaintEvent *event)
     const quint8 zoomSide = 120;
 
     QPoint zoomStart = QCursor::pos();
-    zoomStart -= QPoint(zoomSide / 4, zoomSide / 4);
+    zoomStart -= QPoint(zoomSide / 5, zoomSide / 5);
 
     QPoint zoomEnd = QCursor::pos();
-    zoomEnd += QPoint(zoomSide / 4, zoomSide / 4);
+    zoomEnd += QPoint(zoomSide / 5, zoomSide / 5);
 
     QRect zoomRect = QRect(zoomStart, zoomEnd);
     zoomRect.setWidth(zoomRect.width());
@@ -61,17 +61,19 @@ void Magnifier::paintEvent(QPaintEvent *event)
     QPixmap zoomPixmap = desktopPixmap->copy(zoomRect).scaled(QSize(zoomSide, zoomSide), Qt::KeepAspectRatio);
 
     QPainter paint(this);
-        paint.setPen( QPen(QBrush( QColor(255, 0, 0, 180) ), 2) );
-        paint.drawRect(zoomPixmap.rect());
-        paint.drawText(zoomPixmap.rect().center()-QPoint(4,-4),"+");
+    paint.setPen( QPen(QBrush( QColor(255, 0, 0, 180) ), 2) );
 
     QPoint drawPoint = QPoint(0,0);
     paint.drawPixmap(drawPoint, zoomPixmap);
+
+    paint.drawRect(this->rect());
+    drawPoint = this->rect().center()-QPoint(-5,-15);
+    paint.drawText(drawPoint,"+");
+
     QString sizeStr;
     QTextStream(&sizeStr)<<ParentSize.width()<<" x "<<ParentSize.height();
-    drawPoint = this->rect().center();
-    paint.drawText(drawPoint,"+");
-    drawPoint.setY(this->rect().bottom());
+
+    drawPoint.setY(this->rect().bottomLeft().y());
     paint.drawText(drawPoint,sizeStr);
 
 

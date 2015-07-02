@@ -27,6 +27,7 @@ Panel::Panel(QWidget *parent) :
     connect(ui->CancelButton,SIGNAL(pressed()),this,SLOT(cancelBtnPressed()));
     connect(ui->CropButton, SIGNAL(pressed()), this, SLOT(cropBtnPressed()));
     connect(ui->comboBox, SIGNAL(activated(int)),this,SLOT(comBoxSelection(int)));
+
 }
 
 Panel::~Panel()
@@ -77,7 +78,11 @@ void Panel::comBoxSelection(int activated)
 void Panel::settingSpinBox()
 {
    ui->widthSpinBox->setMinimum(0);
-   ui->HeightSpinBox->setMinimum(0);
+   ui->heightSpinBox->setMinimum(0);
    ui->widthSpinBox->setMaximum(qApp->desktop()->width());
-   ui->HeightSpinBox->setMaximum(qApp->desktop()->height());
+   ui->heightSpinBox->setMaximum(qApp->desktop()->height());
+
+   ui->widthSpinBox->setValue(parentWi->geometry().width());
+   ui->heightSpinBox->setValue(parentWi->geometry().height());
+
 }
