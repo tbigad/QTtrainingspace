@@ -19,9 +19,13 @@ public:
 private:
     Ui::Panel *ui;
     FramelessHelper* mFrameless;
+    QWidget *parentWi;
+
+    void fillComboBox();
 private slots:
     void cropBtnPressed();
     void cancelBtnPressed();
+    void comBoxSelection(int activated);
 protected:
     void closeEvent(QCloseEvent *event);
 };
