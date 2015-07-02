@@ -86,8 +86,11 @@ void SimpleWindow::setSizeWidget(QPoint moveMousePos)
     isWidgetResizeble = true;
     QRect initRect(topLeft,bottonRight);
     setGeometry(initRect);
+
     magnifier.get()->SetParentSize(size());
+    magnifier.get()->SetParentDesktopScreen(&desktopPixmap);
     magnifier.get()->magnifierMove(&moveMousePos);
+
     raise();
 }
 
@@ -111,12 +114,17 @@ void SimpleWindow::resizeEvent(QResizeEvent *event)
 
 void SimpleWindow::initialConfigurationWidget()
 {
+    desktop = QApplication::desktop();
+    QScreen *screen = QApplication::primaryScreen();
+    desktopPixmap = screen->grabWindow(desktop->winId(), desktop->geometry().x(),
+                                                      desktop->geometry().y(), desktop->geometry().width(),
+                                                      desktop->geometry().height());
+
     FullScreenHelper::MaximizeOnVirtualScreen(this);
     setWindowOpacity(0.1);
     setCursor(Qt::CrossCursor);
     widgetCreated = false;
     isWidgetResizeble = false;
-
 }
 
 void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetResizable)

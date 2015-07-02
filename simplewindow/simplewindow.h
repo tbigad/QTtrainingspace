@@ -19,6 +19,7 @@ public:
     SimpleWindow(QWidget *parent = 0);
    ~SimpleWindow();
     void setChekBoxState(bool chekBoxState);
+
 private:
     FramelessHelper* mFrameless;
     std::shared_ptr<Magnifier> magnifier;
@@ -35,6 +36,9 @@ private:
 
     void initialConfigurationWidget();
     void secondarySettingWidget(bool setWidgetMovable, bool setWidgetResizable);
+
+    QPixmap desktopPixmap;
+    QDesktopWidget *desktop;
 
 
 protected:

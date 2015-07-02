@@ -2,6 +2,12 @@
 #define GLASS_H
 
 #include <QWidget>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QDebug>
+#include <QPaintEvent>
+#include <QPainter>
+#include <QScreen>
 
 class Magnifier : public QWidget
 {
@@ -11,11 +17,15 @@ public:
     ~Magnifier();
     void magnifierMove(QPoint *globalMousePos);
     void SetParentSize(QSize SizeP);
+    void SetParentDesktopScreen(QPixmap *primaryScreenPixmap);
 
 private:
     QSize MagnifierSize;
     QSize ParentSize;
     QWidget *parentWidg;
+
+
+    QPixmap *desktopPixmap;
 signals:
 
 public slots:
