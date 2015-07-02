@@ -8,7 +8,6 @@ Panel::Panel(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Panel), mFrameless(new FramelessHelper)
 {
-
     parentWi = this->parentWidget();
 
     ui->setupUi(this);
@@ -23,6 +22,7 @@ Panel::Panel(QWidget *parent) :
     this->move(posOnDesktop);
 
     fillComboBox();
+    settingSpinBox();
 
     connect(ui->CancelButton,SIGNAL(pressed()),this,SLOT(cancelBtnPressed()));
     connect(ui->CropButton, SIGNAL(pressed()), this, SLOT(cropBtnPressed()));
@@ -67,8 +67,17 @@ void Panel::comBoxSelection(int activated)
         qDebug()<<newRect;
         parentWi->setGeometry(newRect);
         qDebug()<<"Resized 720x480";
+        qDebug()<<parentWi->geometry();
         break;
     default:
         break;
     }
+}
+
+void Panel::settingSpinBox()
+{
+   ui->widthSpinBox->setMinimum(0);
+   ui->HeightSpinBox->setMinimum(0);
+   ui->widthSpinBox->setMaximum(qApp->desktop()->width());
+   ui->HeightSpinBox->setMaximum(qApp->desktop()->height());
 }

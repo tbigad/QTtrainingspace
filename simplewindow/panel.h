@@ -22,6 +22,7 @@ private:
     QWidget *parentWi;
 
     void fillComboBox();
+    void settingSpinBox();
 private slots:
     void cropBtnPressed();
     void cancelBtnPressed();
