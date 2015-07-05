@@ -27,5 +27,5 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     if(!win)
     return;
 
-    win.get()->close();
+    win->close();
 }

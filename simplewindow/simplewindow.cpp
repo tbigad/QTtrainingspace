@@ -56,7 +56,7 @@ void SimpleWindow::mouseReleaseEvent(QMouseEvent *event)
         return;
     }
     if (isWidgetResizeble){
-        magnifier.get()->hide();
+        magnifier->hide();
         secondarySettingWidget(true,true);
     }
 }
@@ -85,12 +85,11 @@ void SimpleWindow::setSizeWidget(QPoint moveMousePos)
     QRect initRect(topLeft,bottonRight);
     setGeometry(initRect);
 
-    magnifier.get()->SetParentSize(size());
-    magnifier.get()->SetParentDesktopScreen(&desktopPixmap);
-    magnifier.get()->magnifierMove(&moveMousePos);
+    magnifier->SetParentSize(size());
+    magnifier->SetParentDesktopScreen(&desktopPixmap);
+    magnifier->magnifierMove(&moveMousePos);
 
     raise();
-
 }
 
 void SimpleWindow::paintEvent(QPaintEvent *event)
@@ -108,7 +107,7 @@ void SimpleWindow::paintEvent(QPaintEvent *event)
 
 void SimpleWindow::resizeEvent(QResizeEvent *event)
 {
-
+    emit myResizeEvent(event);
 }
 
 void SimpleWindow::initialConfigurationWidget()
@@ -135,7 +134,7 @@ void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetR
     if(chekBox)
     {
         panel = std::make_shared<Panel>(new Panel(this));
-        panel.get()->show();
+        panel->show();
     }
 }
 
@@ -147,7 +146,7 @@ void SimpleWindow::setChekBoxState(bool chekBoxState)
 void SimpleWindow::closeEvent(QCloseEvent *event)
 {
     if(chekBox)
-    panel.get()->close();
+    panel->close();
     magnifier.reset();
 }
 

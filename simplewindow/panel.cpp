@@ -8,8 +8,16 @@ Panel::Panel(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Panel), mFrameless(new FramelessHelper)
 {
-    parentWi = (SimpleWindow*)parentWidget();
-    qDebug()<< "ParentWi in Panel" <<parentWi->isEnabled() <<parentWi<<"parent in Panel: "<< parent;
+    m_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
+
+    m_simpleWindow->setGeometry(100,100,100,100);
+    qDebug() << m_simpleWindow->size();
+
+    connect(m_simpleWindow, &SimpleWindow::myResizeEvent, [=](QResizeEvent *event){
+        qDebug() << event->size();
+    });
+
+    //qDebug()<< "ParentWi in Panel" <<parentWi->isEnabled() <<parentWi<<"parent in Panel: "<< parent;
     ui->setupUi(this);
     FullScreenHelper::MaximizeOnVirtualScreen(this);
 
@@ -27,8 +35,7 @@ Panel::Panel(QWidget *parent) :
     connect(ui->CropButton, SIGNAL(pressed()), this, SLOT(cropBtnPressed()));
     connect(ui->comboBox, SIGNAL(activated(int)),this,SLOT(comBoxSelection(int)));
 
-    connect(ui->widthSpinBox,SIGNAL(valueChanged(int)),this->parentWi,SLOT(setWidth(int)));
-
+    //connect(ui->widthSpinBox,SIGNAL(valueChanged(int)),this->parentWi,SLOT(setWidth(int)));
 }
 
 Panel::~Panel()
@@ -38,13 +45,15 @@ Panel::~Panel()
 
 void Panel::closeEvent(QCloseEvent *event)
 {
-  parentWi->close();
+  m_simpleWindow->close();
 }
 
 void Panel::cropBtnPressed()
 {
     qDebug()<< "Crop button pressed!!!";
     this->close();
+
+    //qDebug() << m_simpleWindow->size();
 }
 
 void Panel::cancelBtnPressed()
@@ -70,11 +79,11 @@ void Panel::comBoxSelection(int activated)
     switch (activated) {
     case 1:
         qDebug()<<ui->comboBox->currentText();
-        newRect=QRect(parentWi->geometry().topLeft(),QSize(720,480));
+        newRect=QRect(m_simpleWindow->geometry().topLeft(),QSize(720,480));
         qDebug()<<newRect;
-        parentWi->setGeometry(newRect);
+        m_simpleWindow->setGeometry(newRect);
         qDebug()<<"Resized 720x480";
-        qDebug()<<parentWi->geometry();
+        qDebug()<<m_simpleWindow->geometry();
         break;
     default:
         break;
@@ -88,8 +97,8 @@ void Panel::settingSpinBox()
    ui->widthSpinBox->setMaximum(qApp->desktop()->width());
    ui->heightSpinBox->setMaximum(qApp->desktop()->height());
 
-   ui->widthSpinBox->setValue(parentWi->geometry().width());
-   ui->heightSpinBox->setValue(parentWi->geometry().height());
+   ui->widthSpinBox->setValue(m_simpleWindow->geometry().width());
+   ui->heightSpinBox->setValue(m_simpleWindow->geometry().height());
 
 }
 

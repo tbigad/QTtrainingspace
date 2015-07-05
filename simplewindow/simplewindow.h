@@ -42,6 +42,8 @@ private:
     QPixmap desktopPixmap;
     QDesktopWidget *desktop;
 
+signals:
+    void myResizeEvent(QResizeEvent *event);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -50,6 +52,7 @@ protected:
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);
+
 public slots:
      void setWidth(int w);
 };
