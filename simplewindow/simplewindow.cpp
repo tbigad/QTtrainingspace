@@ -133,8 +133,7 @@ void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetR
     widgetCreated = true;
     if(chekBox)
     {
-        panel = std::make_shared<Panel>(new Panel(this));
-        panel->show();
+        panel = std::make_shared<Panel>(this);
     }
 }
 
@@ -146,7 +145,7 @@ void SimpleWindow::setChekBoxState(bool chekBoxState)
 void SimpleWindow::closeEvent(QCloseEvent *event)
 {
     if(chekBox)
-    panel->close();
+    panel.reset();
     magnifier.reset();
 }
 

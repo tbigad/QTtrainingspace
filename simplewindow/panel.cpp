@@ -9,17 +9,15 @@ Panel::Panel(QWidget *parent) :
     ui(new Ui::Panel), mFrameless(new FramelessHelper)
 {
     m_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
-
-    m_simpleWindow->setGeometry(100,100,100,100);
     qDebug() << m_simpleWindow->size();
 
     connect(m_simpleWindow, &SimpleWindow::myResizeEvent, [=](QResizeEvent *event){
-        qDebug() << event->size();
+        ui->widthSpinBox->setValue(event->size().width());
+        ui->heightSpinBox->setValue(event->size().height());
     });
 
     //qDebug()<< "ParentWi in Panel" <<parentWi->isEnabled() <<parentWi<<"parent in Panel: "<< parent;
     ui->setupUi(this);
-    FullScreenHelper::MaximizeOnVirtualScreen(this);
 
     mFrameless->activateOn(this);
     mFrameless->setWidgetMovable(true);
@@ -28,6 +26,7 @@ Panel::Panel(QWidget *parent) :
     QPoint posOnDesktop = QApplication::desktop()->geometry().topRight();
     posOnDesktop.setX(posOnDesktop.x() - size().width());
     this->move(posOnDesktop);
+    this->show();
 
     fillComboBox();
     settingSpinBox();
@@ -35,7 +34,7 @@ Panel::Panel(QWidget *parent) :
     connect(ui->CropButton, SIGNAL(pressed()), this, SLOT(cropBtnPressed()));
     connect(ui->comboBox, SIGNAL(activated(int)),this,SLOT(comBoxSelection(int)));
 
-    //connect(ui->widthSpinBox,SIGNAL(valueChanged(int)),this->parentWi,SLOT(setWidth(int)));
+    connect(ui->widthSpinBox,SIGNAL(valueChanged(int)),m_simpleWindow,SLOT(setWidth(int)));
 }
 
 Panel::~Panel()
@@ -78,13 +77,21 @@ void Panel::comBoxSelection(int activated)
     QRect newRect;
     switch (activated) {
     case 1:
-        qDebug()<<ui->comboBox->currentText();
         newRect=QRect(m_simpleWindow->geometry().topLeft(),QSize(720,480));
-        qDebug()<<newRect;
         m_simpleWindow->setGeometry(newRect);
-        qDebug()<<"Resized 720x480";
-        qDebug()<<m_simpleWindow->geometry();
         break;
+    case 2:
+        newRect=QRect(m_simpleWindow->geometry().topLeft(),QSize(1280,720));
+        m_simpleWindow->setGeometry(newRect);
+        qDebug()<<"Resized 1280x720";
+    case 3:
+        newRect=QRect(m_simpleWindow->geometry().topLeft(),QSize(1920,1080));
+        m_simpleWindow->setGeometry(newRect);
+        qDebug()<<"(Full HD) 1080p: 1920x1080";
+    case 4:
+        newRect=QRect(m_simpleWindow->geometry().topLeft(),QSize(3840,2160));
+        m_simpleWindow->setGeometry(newRect);
+        qDebug()<<"(4k) 2160p: 3840x2160";
     default:
         break;
     }

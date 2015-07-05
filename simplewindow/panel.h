@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <FramelessHelper.h>
 #include <simplewindow.h>
+#include <memory>
 
 namespace Ui {
 class Panel;
@@ -16,12 +17,12 @@ class Panel : public QWidget
     Q_OBJECT
 
 public:
-    explicit Panel(QWidget *parent = 0);
+    explicit Panel(QWidget *parent);
     ~Panel();
 
 private:
     Ui::Panel *ui;
-    SimpleWindow *m_simpleWindow;
+    SimpleWindow* m_simpleWindow;
     FramelessHelper* mFrameless;
 
     void fillComboBox();
