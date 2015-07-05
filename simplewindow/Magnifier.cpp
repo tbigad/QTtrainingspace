@@ -16,10 +16,6 @@ Magnifier::~Magnifier()
 void Magnifier::magnifierMove(QPoint *globalMousePos)
 {
     this->show();
-
-
-
-
     QRect desktopRect = QApplication::desktop()->geometry();
     auto newPos = globalMousePos;
 
@@ -73,6 +69,7 @@ void Magnifier::paintEvent(QPaintEvent *event)
     QString sizeStr;
     QTextStream(&sizeStr)<<ParentSize.width()<<" x "<<ParentSize.height();
 
+    drawPoint.setX(this->rect().center().x()-23);
     drawPoint.setY(this->rect().bottomLeft().y());
     paint.drawText(drawPoint,sizeStr);
 

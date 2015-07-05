@@ -4,19 +4,21 @@
 #include "FramelessHelper.h"
 #include "panel.h"
 #include "Magnifier.h"
+#include "fullscreenhelper.h"
 
 #include <QWidget>
 #include <QMouseEvent>
 #include <QPainter>
 #include <memory>
+#include <QDebug>
 
-
-//class QMouseEvent;
+class Panel;
 
 class SimpleWindow: public QWidget
 {
+    Q_OBJECT;
 public:
-    SimpleWindow(QWidget *parent = 0);
+    explicit SimpleWindow(QWidget *parent = 0);
    ~SimpleWindow();
     void setChekBoxState(bool chekBoxState);
 

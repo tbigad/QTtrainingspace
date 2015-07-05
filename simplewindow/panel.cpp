@@ -8,8 +8,8 @@ Panel::Panel(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Panel), mFrameless(new FramelessHelper)
 {
-    parentWi = this->parentWidget();
-
+    parentWi = (SimpleWindow*)parentWidget();
+    qDebug()<< "ParentWi in Panel" <<parentWi->isEnabled() <<parentWi<<"parent in Panel: "<< parent;
     ui->setupUi(this);
     FullScreenHelper::MaximizeOnVirtualScreen(this);
 
@@ -23,10 +23,11 @@ Panel::Panel(QWidget *parent) :
 
     fillComboBox();
     settingSpinBox();
-
     connect(ui->CancelButton,SIGNAL(pressed()),this,SLOT(cancelBtnPressed()));
     connect(ui->CropButton, SIGNAL(pressed()), this, SLOT(cropBtnPressed()));
     connect(ui->comboBox, SIGNAL(activated(int)),this,SLOT(comBoxSelection(int)));
+
+    connect(ui->widthSpinBox,SIGNAL(valueChanged(int)),this->parentWi,SLOT(setWidth(int)));
 
 }
 
@@ -56,6 +57,11 @@ void Panel::fillComboBox()
 {
     ui->comboBox->addItem("Capture Fragment");
     ui->comboBox->addItem("(SD) 480p: 720x480");
+    ui->comboBox->addItem("(HD) 720p: 1280x720");
+    ui->comboBox->addItem("(Full HD) 1080p: 1920x1080");
+    ui->comboBox->addItem("(4k) 2160p: 3840x2160");
+    ui->comboBox->addItem("Custom size...");
+
 }
 
 void Panel::comBoxSelection(int activated)
@@ -84,5 +90,10 @@ void Panel::settingSpinBox()
 
    ui->widthSpinBox->setValue(parentWi->geometry().width());
    ui->heightSpinBox->setValue(parentWi->geometry().height());
+
+}
+
+void Panel::settingLockButton()
+{
 
 }

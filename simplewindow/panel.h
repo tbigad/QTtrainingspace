@@ -3,10 +3,13 @@
 
 #include <QWidget>
 #include <FramelessHelper.h>
+#include <simplewindow.h>
 
 namespace Ui {
 class Panel;
 }
+
+class SimpleWindow;
 
 class Panel : public QWidget
 {
@@ -18,11 +21,12 @@ public:
 
 private:
     Ui::Panel *ui;
+    SimpleWindow *parentWi;
     FramelessHelper* mFrameless;
-    QWidget *parentWi;
 
     void fillComboBox();
     void settingSpinBox();
+    void settingLockButton();
 private slots:
     void cropBtnPressed();
     void cancelBtnPressed();

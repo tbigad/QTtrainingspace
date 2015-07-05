@@ -1,13 +1,11 @@
 #include "simplewindow.h"
-#include "fullscreenhelper.h"
-
-#include <QDebug>
 
 SimpleWindow::SimpleWindow(QWidget *parent)
     : QWidget(parent, Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint|Qt::CustomizeWindowHint|Qt::NoDropShadowWindowHint),
       mFrameless(new FramelessHelper)
 {
     initialConfigurationWidget();
+    qDebug()<< this;
 }
 
 SimpleWindow::~SimpleWindow()
