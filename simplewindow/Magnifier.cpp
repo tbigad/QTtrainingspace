@@ -6,7 +6,13 @@ Magnifier::Magnifier(QWidget *parent) : QWidget(parent, Qt::Window|Qt::Frameless
     MagnifierSize = QSize(100,100);
     setFixedSize(MagnifierSize);
     setWindowOpacity(1);
-    parentWidg = parentWidget();
+    c_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
+    desktopPixmap = std::make_shared<QPixmap>(c_simpleWindow->desktopPixmap);
+
+    connect(c_simpleWindow, &SimpleWindow::resizeSimpleWindow, [=](QResizeEvent *event){
+        this->ParentSize = event->size();
+    });
+
 }
 
 Magnifier::~Magnifier()
@@ -26,8 +32,8 @@ void Magnifier::magnifierMove(QPoint *globalMousePos)
     auto maxY = desktopRect.height() - MagnifierSize.height();
 
 
-    if(parentWidg->geometry().right()> this->geometry().left()) newX -= MagnifierSize.width();
-    if(parentWidg->geometry().bottom() > this->geometry().bottom()) newY -= MagnifierSize.height();
+    if(c_simpleWindow->geometry().right()> this->geometry().left()) newX -= MagnifierSize.width();
+    if(c_simpleWindow->geometry().bottom() > this->geometry().bottom()) newY -= MagnifierSize.height();
 
     if(newX > maxX) newX = maxX;
     if(newY > maxY) newY = maxY;
@@ -54,8 +60,8 @@ void Magnifier::paintEvent(QPaintEvent *event)
     zoomRect.setHeight(zoomRect.height());
 
 
-    //QPixmap zoomPixmap = desktopPixmap->copy(zoomRect).scaled(QSize(zoomSide, zoomSide), Qt::KeepAspectRatio);
-    QPixmap zoomPixmap = qApp->desktop()->grab(zoomRect);
+   QPixmap zoomPixmap = desktopPixmap->copy(zoomRect).scaled(QSize(zoomSide, zoomSide), Qt::KeepAspectRatio);
+   // QPixmap zoomPixmap = qApp->desktop()->grab(zoomRect);
 
     QPainter paint(this);
     paint.setPen( QPen(QBrush( QColor(255, 0, 0, 180) ), 2) );
@@ -69,6 +75,7 @@ void Magnifier::paintEvent(QPaintEvent *event)
 
     QString sizeStr;
     QTextStream(&sizeStr)<<ParentSize.width()<<" x "<<ParentSize.height();
+    qDebug()<<ParentSize;
 
     drawPoint.setX(this->rect().center().x()-23);
     drawPoint.setY(this->rect().bottomLeft().y());
@@ -77,12 +84,3 @@ void Magnifier::paintEvent(QPaintEvent *event)
 
 }
 
-void Magnifier::SetParentSize(QSize SizeP)
-{
-    ParentSize = SizeP;
-}
-
-void Magnifier::SetParentDesktopScreen(QPixmap *primaryScreenPixmap)
-{
-    desktopPixmap = primaryScreenPixmap;
-}

@@ -7,7 +7,11 @@
 #include <QDebug>
 #include <QPaintEvent>
 #include <QPainter>
-#include <QScreen>
+#include <QPixmap>
+#include <simplewindow.h>
+#include <memory>
+
+class SimpleWindow; //
 
 class Magnifier : public QWidget
 {
@@ -16,16 +20,13 @@ public:
     explicit Magnifier(QWidget *parent);
     ~Magnifier();
     void magnifierMove(QPoint *globalMousePos);
-    void SetParentSize(QSize SizeP);
-    void SetParentDesktopScreen(QPixmap *primaryScreenPixmap);
 
 private:
     QSize MagnifierSize;
     QSize ParentSize;
-    QWidget *parentWidg;
+    SimpleWindow *c_simpleWindow;
+    std::shared_ptr<QPixmap> desktopPixmap;
 
-
-    QPixmap *desktopPixmap;
 signals:
 
 public slots:

@@ -22,7 +22,7 @@ void SimpleWindow::mousePressEvent(QMouseEvent *event)
             return;
         }
         mStartDragPos = event->globalPos();
-        magnifier = std::make_shared<Magnifier>(new Magnifier(this));
+        magnifier = std::make_shared<Magnifier>(this);
         break;
     case Qt::RightButton:
         this->close();
@@ -85,8 +85,8 @@ void SimpleWindow::setSizeWidget(QPoint moveMousePos)
     QRect initRect(topLeft,bottonRight);
     setGeometry(initRect);
 
-    magnifier->SetParentSize(size());
-    magnifier->SetParentDesktopScreen(&desktopPixmap);
+//    magnifier->SetParentSize(size());
+//    magnifier->SetParentDesktopScreen(&desktopPixmap);
     magnifier->magnifierMove(&moveMousePos);
 
     raise();
@@ -107,22 +107,18 @@ void SimpleWindow::paintEvent(QPaintEvent *event)
 
 void SimpleWindow::resizeEvent(QResizeEvent *event)
 {
-    emit myResizeEvent(event);
+    emit resizeSimpleWindow(event);
 }
 
 void SimpleWindow::initialConfigurationWidget()
 {
-    desktop = QApplication::desktop();
-    QScreen *screen = QApplication::primaryScreen();
-    desktopPixmap = screen->grabWindow(desktop->winId(), desktop->geometry().x(),
-                                                      desktop->geometry().y(), desktop->geometry().width(),
-                                                      desktop->geometry().height());
 
     FullScreenHelper::MaximizeOnVirtualScreen(this);
     setWindowOpacity(0.1);
     setCursor(Qt::CrossCursor);
     widgetCreated = false;
     isWidgetResizeble = false;
+    getDesktopPixmap();
 }
 
 void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetResizable)
@@ -149,9 +145,24 @@ void SimpleWindow::closeEvent(QCloseEvent *event)
     magnifier.reset();
 }
 
+void SimpleWindow::getDesktopPixmap()
+{
+    QDesktopWidget *desktop = QApplication::desktop();
+    desktopPixmap = qApp->primaryScreen()->grabWindow(desktop->winId(), desktop->geometry().x(),
+                                                      desktop->geometry().y(), desktop->geometry().width(),
+                                                      desktop->geometry().height());
+}
+
 void SimpleWindow::setWidth(int w)
 {
-    this->size().setWidth(w);
+    this->setGeometry(QRect(this->geometry().topLeft(),QSize(w,this->height())));
 }
+
+void SimpleWindow::setHeight(int h)
+{
+    this->setGeometry(QRect(this->geometry().topLeft(),QSize(this->width(),h)));
+}
+
+
 
 

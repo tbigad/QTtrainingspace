@@ -11,9 +11,10 @@ Panel::Panel(QWidget *parent) :
     m_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
     qDebug() << m_simpleWindow->size();
 
-    connect(m_simpleWindow, &SimpleWindow::myResizeEvent, [=](QResizeEvent *event){
+    connect(m_simpleWindow, &SimpleWindow::resizeSimpleWindow, [=](QResizeEvent *event){
         ui->widthSpinBox->setValue(event->size().width());
         ui->heightSpinBox->setValue(event->size().height());
+        qDebug()<<event->size();
     });
 
     //qDebug()<< "ParentWi in Panel" <<parentWi->isEnabled() <<parentWi<<"parent in Panel: "<< parent;
@@ -35,6 +36,7 @@ Panel::Panel(QWidget *parent) :
     connect(ui->comboBox, SIGNAL(activated(int)),this,SLOT(comBoxSelection(int)));
 
     connect(ui->widthSpinBox,SIGNAL(valueChanged(int)),m_simpleWindow,SLOT(setWidth(int)));
+    connect(ui->heightSpinBox, SIGNAL(valueChanged(int)),m_simpleWindow, SLOT(setHeight(int)));
 }
 
 Panel::~Panel()
@@ -69,27 +71,26 @@ void Panel::fillComboBox()
     ui->comboBox->addItem("(Full HD) 1080p: 1920x1080");
     ui->comboBox->addItem("(4k) 2160p: 3840x2160");
     ui->comboBox->addItem("Custom size...");
-
 }
 
 void Panel::comBoxSelection(int activated)
 {
-    QRect newRect;
+    QRect newRect(m_simpleWindow->geometry());
     switch (activated) {
     case 1:
-        newRect=QRect(m_simpleWindow->geometry().topLeft(),QSize(720,480));
+        newRect.setSize(QSize(720,480));
         m_simpleWindow->setGeometry(newRect);
         break;
     case 2:
-        newRect=QRect(m_simpleWindow->geometry().topLeft(),QSize(1280,720));
+        newRect.setSize(QSize(1280,720));
         m_simpleWindow->setGeometry(newRect);
         qDebug()<<"Resized 1280x720";
     case 3:
-        newRect=QRect(m_simpleWindow->geometry().topLeft(),QSize(1920,1080));
+        newRect.setSize(QSize(1920,1080));
         m_simpleWindow->setGeometry(newRect);
         qDebug()<<"(Full HD) 1080p: 1920x1080";
     case 4:
-        newRect=QRect(m_simpleWindow->geometry().topLeft(),QSize(3840,2160));
+        newRect.setSize(QSize(3840,2160));
         m_simpleWindow->setGeometry(newRect);
         qDebug()<<"(4k) 2160p: 3840x2160";
     default:

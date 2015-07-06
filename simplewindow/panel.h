@@ -22,7 +22,7 @@ public:
 
 private:
     Ui::Panel *ui;
-    SimpleWindow* m_simpleWindow;
+    SimpleWindow *m_simpleWindow;
     FramelessHelper* mFrameless;
 
     void fillComboBox();

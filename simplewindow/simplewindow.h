@@ -11,17 +11,22 @@
 #include <QPainter>
 #include <memory>
 #include <QDebug>
+#include <QScreen>
 
 class Panel;
+class Magnifier;
 
 class SimpleWindow: public QWidget
 {
-    Q_OBJECT;
+    Q_OBJECT
 public:
     explicit SimpleWindow(QWidget *parent = 0);
    ~SimpleWindow();
     void setChekBoxState(bool chekBoxState);
+    void getDesktopPixmap();
 
+
+    QPixmap desktopPixmap;
 private:
     FramelessHelper* mFrameless;
     std::shared_ptr<Magnifier> magnifier;
@@ -39,11 +44,8 @@ private:
     void initialConfigurationWidget();
     void secondarySettingWidget(bool setWidgetMovable, bool setWidgetResizable);
 
-    QPixmap desktopPixmap;
-    QDesktopWidget *desktop;
-
 signals:
-    void myResizeEvent(QResizeEvent *event);
+    void resizeSimpleWindow(QResizeEvent *event);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -55,6 +57,7 @@ protected:
 
 public slots:
      void setWidth(int w);
+     void setHeight(int h);
 };
 
 #endif // SIMPLEWINDOW_H
