@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    test = std::make_shared<TestWidget>(new TestWidget(this));
+    test = std::make_shared<TestWidget>(this);
 }
 
 MainWindow::~MainWindow()
