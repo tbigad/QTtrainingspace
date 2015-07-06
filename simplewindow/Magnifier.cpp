@@ -13,6 +13,8 @@ Magnifier::Magnifier(QWidget *parent) : QWidget(parent, Qt::Window|Qt::Frameless
         this->ParentSize = event->size();
     });
 
+    this->show();
+
 }
 
 Magnifier::~Magnifier()
@@ -21,7 +23,6 @@ Magnifier::~Magnifier()
 
 void Magnifier::magnifierMove(QPoint *globalMousePos)
 {
-    this->show();
     QRect desktopRect = QApplication::desktop()->geometry();
     auto newPos = globalMousePos;
 
@@ -31,9 +32,8 @@ void Magnifier::magnifierMove(QPoint *globalMousePos)
     auto maxX = desktopRect.width() - MagnifierSize.width();
     auto maxY = desktopRect.height() - MagnifierSize.height();
 
-
-    if(c_simpleWindow->geometry().right()> this->geometry().left()) newX -= MagnifierSize.width();
-    if(c_simpleWindow->geometry().bottom() > this->geometry().bottom()) newY -= MagnifierSize.height();
+    if(c_simpleWindow->geometry().left() == newX) newX -= this->width();
+    if(c_simpleWindow->geometry().top() == newY) newY -= this->height();
 
     if(newX > maxX) newX = maxX;
     if(newY > maxY) newY = maxY;
@@ -75,7 +75,6 @@ void Magnifier::paintEvent(QPaintEvent *event)
 
     QString sizeStr;
     QTextStream(&sizeStr)<<ParentSize.width()<<" x "<<ParentSize.height();
-    qDebug()<<ParentSize;
 
     drawPoint.setX(this->rect().center().x()-23);
     drawPoint.setY(this->rect().bottomLeft().y());

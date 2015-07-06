@@ -9,12 +9,10 @@ Panel::Panel(QWidget *parent) :
     ui(new Ui::Panel), mFrameless(new FramelessHelper)
 {
     m_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
-    qDebug() << m_simpleWindow->size();
 
     connect(m_simpleWindow, &SimpleWindow::resizeSimpleWindow, [=](QResizeEvent *event){
         ui->widthSpinBox->setValue(event->size().width());
         ui->heightSpinBox->setValue(event->size().height());
-        qDebug()<<event->size();
     });
 
     //qDebug()<< "ParentWi in Panel" <<parentWi->isEnabled() <<parentWi<<"parent in Panel: "<< parent;
@@ -54,12 +52,10 @@ void Panel::cropBtnPressed()
     qDebug()<< "Crop button pressed!!!";
     this->close();
 
-    //qDebug() << m_simpleWindow->size();
 }
 
 void Panel::cancelBtnPressed()
 {
-    qDebug()<< "Cancel button pressed!!!";
     this->close();
 }
 
@@ -84,15 +80,12 @@ void Panel::comBoxSelection(int activated)
     case 2:
         newRect.setSize(QSize(1280,720));
         m_simpleWindow->setGeometry(newRect);
-        qDebug()<<"Resized 1280x720";
     case 3:
         newRect.setSize(QSize(1920,1080));
         m_simpleWindow->setGeometry(newRect);
-        qDebug()<<"(Full HD) 1080p: 1920x1080";
     case 4:
         newRect.setSize(QSize(3840,2160));
         m_simpleWindow->setGeometry(newRect);
-        qDebug()<<"(4k) 2160p: 3840x2160";
     default:
         break;
     }

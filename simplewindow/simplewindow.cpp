@@ -5,7 +5,6 @@ SimpleWindow::SimpleWindow(QWidget *parent)
       mFrameless(new FramelessHelper)
 {
     initialConfigurationWidget();
-    qDebug()<< this;
 }
 
 SimpleWindow::~SimpleWindow()
@@ -56,7 +55,7 @@ void SimpleWindow::mouseReleaseEvent(QMouseEvent *event)
         return;
     }
     if (isWidgetResizeble){
-        magnifier->hide();
+        magnifier->close();
         secondarySettingWidget(true,true);
     }
 }
@@ -85,8 +84,6 @@ void SimpleWindow::setSizeWidget(QPoint moveMousePos)
     QRect initRect(topLeft,bottonRight);
     setGeometry(initRect);
 
-//    magnifier->SetParentSize(size());
-//    magnifier->SetParentDesktopScreen(&desktopPixmap);
     magnifier->magnifierMove(&moveMousePos);
 
     raise();
