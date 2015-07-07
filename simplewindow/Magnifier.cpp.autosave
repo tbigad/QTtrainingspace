@@ -60,8 +60,7 @@ void Magnifier::paintEvent(QPaintEvent *event)
     zoomRect.setHeight(zoomRect.height());
 
 
-   QPixmap zoomPixmap = desktopPixmap->copy(zoomRect).scaled(QSize(zoomSide, zoomSide), Qt::KeepAspectRatio);
-   // QPixmap zoomPixmap = qApp->desktop()->grab(zoomRect);
+    QPixmap zoomPixmap = desktopPixmap->copy(zoomRect).scaled(QSize(zoomSide, zoomSide), Qt::KeepAspectRatio);
 
     QPainter paint(this);
     paint.setPen( QPen(QBrush( QColor(255, 0, 0, 180) ), 2) );

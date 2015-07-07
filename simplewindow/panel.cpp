@@ -25,16 +25,19 @@ Panel::Panel(QWidget *parent) :
     QPoint posOnDesktop = QApplication::desktop()->geometry().topRight();
     posOnDesktop.setX(posOnDesktop.x() - size().width());
     this->move(posOnDesktop);
-    this->show();
 
     fillComboBox();
     settingSpinBox();
+    settingLockButton();
+
     connect(ui->CancelButton,SIGNAL(pressed()),this,SLOT(cancelBtnPressed()));
     connect(ui->CropButton, SIGNAL(pressed()), this, SLOT(cropBtnPressed()));
     connect(ui->comboBox, SIGNAL(activated(int)),this,SLOT(comBoxSelection(int)));
 
     connect(ui->widthSpinBox,SIGNAL(valueChanged(int)),m_simpleWindow,SLOT(setWidth(int)));
     connect(ui->heightSpinBox, SIGNAL(valueChanged(int)),m_simpleWindow, SLOT(setHeight(int)));
+
+    this->show();
 }
 
 Panel::~Panel()
@@ -105,5 +108,7 @@ void Panel::settingSpinBox()
 
 void Panel::settingLockButton()
 {
+    QIcon icon(":/icons/lock.png");
+    ui->lockButton->setIcon(icon);
 
 }

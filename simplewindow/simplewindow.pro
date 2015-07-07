@@ -31,4 +31,4 @@ FORMS    += mainwindow.ui \
     panel.ui
 
 RESOURCES += \
-    res.qrc
+    icons.qrc
