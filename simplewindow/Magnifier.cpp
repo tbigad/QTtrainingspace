@@ -47,29 +47,18 @@ void Magnifier::magnifierMove(QPoint *globalMousePos)
 
 void Magnifier::paintEvent(QPaintEvent *event)
 {
-    const quint8 zoomSide = 120;
-
-    QPoint zoomStart = QCursor::pos();
-    zoomStart -= QPoint(zoomSide / 5, zoomSide / 5);
-
-    QPoint zoomEnd = QCursor::pos();
-    zoomEnd += QPoint(zoomSide / 5, zoomSide / 5);
-
-    QRect zoomRect = QRect(zoomStart, zoomEnd);
-    zoomRect.setWidth(zoomRect.width());
-    zoomRect.setHeight(zoomRect.height());
-
-
-    QPixmap zoomPixmap = desktopPixmap->copy(zoomRect).scaled(QSize(zoomSide, zoomSide), Qt::KeepAspectRatio);
+    QRect scaledRect(QCursor::pos()-QPoint(10,10),QCursor::pos()+QPoint(10,10));
+    qDebug()<< scaledRect << QCursor::pos();
+    QPixmap scaledPixmsp = desktopPixmap->copy(scaledRect);
+    QPixmap zoomPixmap = scaledPixmsp.scaled(this->size(), Qt::KeepAspectRatio);
 
     QPainter paint(this);
-    paint.setPen( QPen(QBrush( QColor(255, 0, 0, 180) ), 2) );
-
     QPoint drawPoint = QPoint(0,0);
     paint.drawPixmap(drawPoint, zoomPixmap);
 
+    paint.setPen( QPen(QBrush( QColor(255, 0, 0, 180) ), 2) );
     paint.drawRect(this->rect());
-    drawPoint = this->rect().center()-QPoint(-5,-15);
+    drawPoint = this->rect().center();/*-QPoint(-5,-15)*/
     paint.drawText(drawPoint,"+");
 
     QString sizeStr;

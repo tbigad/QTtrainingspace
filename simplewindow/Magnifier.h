@@ -11,7 +11,7 @@
 #include <simplewindow.h>
 #include <memory>
 
-class SimpleWindow; //
+class SimpleWindow;
 
 class Magnifier : public QWidget
 {
