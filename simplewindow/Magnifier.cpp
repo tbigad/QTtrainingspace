@@ -1,7 +1,8 @@
 #include "Magnifier.h"
 
 
-Magnifier::Magnifier(QWidget *parent) : QWidget(parent, Qt::Window|Qt::FramelessWindowHint|Qt::CustomizeWindowHint)
+Magnifier::Magnifier(QWidget *parent)
+    : QWidget(parent, Qt::Window|Qt::FramelessWindowHint|Qt::CustomizeWindowHint|Qt::NoDropShadowWindowHint)
 {
     MagnifierSize = QSize(qApp->desktop()->width()/12,qApp->desktop()->width()/12);
     setFixedSize(MagnifierSize);
@@ -14,7 +15,6 @@ Magnifier::Magnifier(QWidget *parent) : QWidget(parent, Qt::Window|Qt::Frameless
     });
 
     this->show();
-
 }
 
 Magnifier::~Magnifier()
@@ -41,7 +41,7 @@ void Magnifier::magnifierMove(QPoint *globalMousePos)
     if(newX < 0) newX = 0;
     if(newY < 0) newY = 0;
 
-    this->setGeometry(newX,newY,MagnifierSize.width(),MagnifierSize.height());
+    this->move(newX, newY);
     this->repaint();
 }
 
@@ -56,7 +56,7 @@ void Magnifier::paintEvent(QPaintEvent *event)
     QPoint drawPoint = QPoint(0,0);
     paint.drawPixmap(drawPoint, zoomPixmap);
 
-    paint.setPen( QPen(QBrush( QColor(255, 0, 0, 180) ), 2) );
+    paint.setPen( QPen(QBrush( QColor(255, 0, 0, 0) ), 2) );
     paint.drawRect(this->rect());
     drawPoint = this->rect().center()/*-QPoint(4,-4)*/;
     paint.drawText(drawPoint,"+");

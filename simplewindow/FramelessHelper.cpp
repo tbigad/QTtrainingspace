@@ -40,7 +40,7 @@ private:
   void updateCursorShape( const QPoint& globalMousePos );
   void resizeWidget( const QPoint& globalMousePos );
   void moveWidget( const QPoint& globalMousePos );
-  void MoveInsideDesktop(const QPoint& globalMousePos);
+  void moveInsideDesktop(const QPoint& globalMousePos);
 
   void handleMousePressEvent( QMouseEvent* event );
   void handleMouseReleaseEvent( QMouseEvent* event );
@@ -330,10 +330,10 @@ void WidgetData::resizeWidget( const QPoint& globalMousePos )
 
 void WidgetData::moveWidget( const QPoint& globalMousePos )
 {
-    MoveInsideDesktop(globalMousePos);
+    moveInsideDesktop(globalMousePos);
 }
 
-void WidgetData::MoveInsideDesktop(const QPoint& globalMousePos)
+void WidgetData::moveInsideDesktop(const QPoint& globalMousePos)
 {
     QRect desktopRect = QApplication::desktop()->geometry();
     auto newPoition = globalMousePos - mDragPos;
@@ -349,8 +349,7 @@ void WidgetData::MoveInsideDesktop(const QPoint& globalMousePos)
     if(newX > maxX) newX = maxX;
     if(newY > maxY) newY = maxY;
 
-    mWidget->setGeometry(newX, newY, mWidget->width(), mWidget->height());
-
+    mWidget->move(newX, newY);
 }
 
 void WidgetData::handleMousePressEvent( QMouseEvent* event )

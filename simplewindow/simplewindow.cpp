@@ -13,7 +13,6 @@ SimpleWindow::~SimpleWindow()
 
 void SimpleWindow::mousePressEvent(QMouseEvent *event)
 {
-
     mLeftBtnPressed = true;
     switch (event->button()) {
     case Qt::LeftButton:
@@ -36,9 +35,8 @@ void SimpleWindow::mouseMoveEvent(QMouseEvent *event)
     if(widgetCreated)
         return;
 
-    if(mLeftBtnPressed)
-    {
-    setSizeWidget(event->globalPos());
+    if(mLeftBtnPressed) {
+        setSizeWidget(event->globalPos());
     }
 }
 
@@ -86,14 +84,11 @@ void SimpleWindow::setSizeWidget(QPoint moveMousePos)
     setGeometry(initRect);
 
     magnifier->magnifierMove(&moveMousePos);
-
-    raise();
 }
 
 void SimpleWindow::paintEvent(QPaintEvent *event)
 {
     const QPen whitePen(Qt::white, 2);
-    const QPen blackPen(Qt::black, 2);
 
     QPainter paint(this);
     paint.setOpacity(1);
@@ -110,7 +105,6 @@ void SimpleWindow::resizeEvent(QResizeEvent *event)
 
 void SimpleWindow::initialConfigurationWidget()
 {
-
     FullScreenHelper::MaximizeOnVirtualScreen(this);
     setWindowOpacity(0.1);
     setCursor(Qt::CrossCursor);
