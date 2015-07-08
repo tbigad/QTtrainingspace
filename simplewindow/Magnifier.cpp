@@ -47,9 +47,10 @@ void Magnifier::magnifierMove(QPoint *globalMousePos)
 
 void Magnifier::paintEvent(QPaintEvent *event)
 {
+
     QPoint scaledCoefficient(this->size().width()/6,this->size().height()/6);
     QRect scaledRect(QCursor::pos()-scaledCoefficient,QCursor::pos()+scaledCoefficient);
-    QPixmap zoomPixmap = desktopPixmap->copy(scaledRect).scaled(this->size(), Qt::KeepAspectRatio);
+    QPixmap zoomPixmap = desktopPixmap->copy(scaledRect).scaled(this->size(), Qt::IgnoreAspectRatio);
 
     QPainter paint(this);
     QPoint drawPoint = QPoint(0,0);
@@ -57,7 +58,7 @@ void Magnifier::paintEvent(QPaintEvent *event)
 
     paint.setPen( QPen(QBrush( QColor(255, 0, 0, 180) ), 2) );
     paint.drawRect(this->rect());
-    drawPoint = this->rect().center()-QPoint(4,-4);/**/
+    drawPoint = this->rect().center()/*-QPoint(4,-4)*/;
     paint.drawText(drawPoint,"+");
 
     QString sizeStr;
