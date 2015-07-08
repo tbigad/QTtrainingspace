@@ -3,7 +3,7 @@
 
 Magnifier::Magnifier(QWidget *parent) : QWidget(parent, Qt::Window|Qt::FramelessWindowHint|Qt::CustomizeWindowHint)
 {
-    MagnifierSize = QSize(100,100);
+    MagnifierSize = QSize(qApp->desktop()->width()/12,qApp->desktop()->width()/12);
     setFixedSize(MagnifierSize);
     setWindowOpacity(1);
     c_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
@@ -47,10 +47,9 @@ void Magnifier::magnifierMove(QPoint *globalMousePos)
 
 void Magnifier::paintEvent(QPaintEvent *event)
 {
-    QRect scaledRect(QCursor::pos()-QPoint(10,10),QCursor::pos()+QPoint(10,10));
-    qDebug()<< scaledRect << QCursor::pos();
-    QPixmap scaledPixmsp = desktopPixmap->copy(scaledRect);
-    QPixmap zoomPixmap = scaledPixmsp.scaled(this->size(), Qt::KeepAspectRatio);
+    QPoint scaledCoefficient(this->size().width()/6,this->size().height()/6);
+    QRect scaledRect(QCursor::pos()-scaledCoefficient,QCursor::pos()+scaledCoefficient);
+    QPixmap zoomPixmap = desktopPixmap->copy(scaledRect).scaled(this->size(), Qt::KeepAspectRatio);
 
     QPainter paint(this);
     QPoint drawPoint = QPoint(0,0);
@@ -58,7 +57,7 @@ void Magnifier::paintEvent(QPaintEvent *event)
 
     paint.setPen( QPen(QBrush( QColor(255, 0, 0, 180) ), 2) );
     paint.drawRect(this->rect());
-    drawPoint = this->rect().center();/*-QPoint(-5,-15)*/
+    drawPoint = this->rect().center()-QPoint(4,-4);/**/
     paint.drawText(drawPoint,"+");
 
     QString sizeStr;

@@ -52,6 +52,7 @@ void SimpleWindow::mouseReleaseEvent(QMouseEvent *event)
       if((this->size().height()< 10) || (this->size().width()< 10) || (isWidgetResizeble == false) )
     {
         initialConfigurationWidget();
+        magnifier->close();
         return;
     }
     if (isWidgetResizeble){
