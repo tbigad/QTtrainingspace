@@ -8,11 +8,14 @@ Magnifier::Magnifier(QWidget *parent)
     setFixedSize(MagnifierSize);
     setWindowOpacity(1);
     c_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
-   // desktopPixmap = std::make_shared<QPixmap>(c_simpleWindow->desktopPixmap);
+
+    settingSizeLabel();
+
     QDesktopWidget *desktop = QApplication::desktop();
     desktopPixmap = std::make_shared<QPixmap>(qApp->primaryScreen()->grabWindow(desktop->winId(), desktop->geometry().x(),
                                                       desktop->geometry().y(), desktop->geometry().width(),
                                                       desktop->geometry().height()));
+
     connect(c_simpleWindow, &SimpleWindow::resizeSimpleWindow, [=](QResizeEvent *event){
         this->ParentSize = event->size();
     });
@@ -22,6 +25,19 @@ Magnifier::Magnifier(QWidget *parent)
 
 Magnifier::~Magnifier()
 {
+}
+
+void Magnifier::settingSizeLabel()
+{
+    labelSize = new QLabel();
+    labelSize->setLineWidth(0);
+    labelSize->setStyleSheet("background-color: gray;""color: white;");
+
+    labelLayout = new QVBoxLayout;
+    labelLayout->addWidget(labelSize);
+    this->setLayout(labelLayout);
+    labelLayout->setAlignment(Qt::AlignHCenter|Qt::AlignBottom);
+
 }
 
 void Magnifier::magnifierMove(QPoint *globalMousePos)
@@ -62,14 +78,13 @@ void Magnifier::paintEvent(QPaintEvent *event)
 
     paint.setPen( QPen(QBrush( QColor(Qt::black) ), 2) );
     paint.drawRect(this->rect());
-    drawPoint = this->rect().center()/*-QPoint(4,-4)*/;
-    paint.drawText(drawPoint,"+");
 
     QString sizeStr;
     QTextStream(&sizeStr)<<ParentSize.width()<<" x "<<ParentSize.height();
+    qDebug()<<sizeStr;
+    labelSize->setText(sizeStr);
 
-    drawPoint.setX(this->rect().center().x()-23);
-    drawPoint.setY(this->rect().bottomLeft().y());
-    paint.drawText(drawPoint,sizeStr);
+    drawPoint = this->rect().center();
+    paint.drawText(drawPoint,"+");
 }
 

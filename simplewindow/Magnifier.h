@@ -10,6 +10,8 @@
 #include <QPixmap>
 #include <simplewindow.h>
 #include <memory>
+#include <QLabel>
+#include <QVBoxLayout>
 
 class SimpleWindow;
 
@@ -26,6 +28,11 @@ private:
     QSize ParentSize;
     SimpleWindow *c_simpleWindow;
     std::shared_ptr<QPixmap> desktopPixmap;
+
+
+    QLabel *labelSize;
+    QVBoxLayout *labelLayout;
+    void settingSizeLabel();
 
 signals:
 
