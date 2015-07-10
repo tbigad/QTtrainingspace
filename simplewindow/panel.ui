@@ -154,7 +154,7 @@
         <string notr="true">image: url(:/res/icon/lockClose.png);</string>
        </property>
        <property name="text">
-        <string>PushButton</string>
+        <string/>
        </property>
        <property name="icon">
         <iconset>

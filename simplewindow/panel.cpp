@@ -37,6 +37,9 @@ Panel::Panel(QWidget *parent) :
     connect(ui->widthSpinBox,SIGNAL(valueChanged(int)),m_simpleWindow,SLOT(setWidth(int)));
     connect(ui->heightSpinBox, SIGNAL(valueChanged(int)),m_simpleWindow, SLOT(setHeight(int)));
 
+
+    connect(ui->lockButton,SIGNAL(clicked(bool)),this,SLOT(setLockButtonIcon(bool)));
+
     this->show();
 }
 
@@ -108,7 +111,16 @@ void Panel::settingSpinBox()
 
 void Panel::settingLockButton()
 {
-    QIcon icon(":/icons/lock.png");
-    ui->lockButton->setIcon(icon);
+    ui->lockButton->setFlat(true);
+    ui->lockButton->setAutoFillBackground(true);
+    ui->lockButton->setIcon(QIcon(":/icons/lock.png"));
+}
 
+void Panel::setLockButtonIcon(bool state)
+{
+    if(state){
+        ui->lockButton->setIcon(QIcon(":/icons/un_lock.png"));
+    }else{
+        ui->lockButton->setIcon(QIcon(":/icons/lock.png"));
+    }
 }
