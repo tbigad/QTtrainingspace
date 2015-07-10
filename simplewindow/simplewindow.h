@@ -23,10 +23,6 @@ public:
     explicit SimpleWindow(QWidget *parent = 0);
    ~SimpleWindow();
     void setChekBoxState(bool chekBoxState);
-    void getDesktopPixmap();
-
-
-    QPixmap desktopPixmap;
 private:
     FramelessHelper* mFrameless;
     std::shared_ptr<Magnifier> magnifier;

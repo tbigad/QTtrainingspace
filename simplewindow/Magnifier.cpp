@@ -4,12 +4,15 @@
 Magnifier::Magnifier(QWidget *parent)
     : QWidget(parent, Qt::Window|Qt::FramelessWindowHint|Qt::CustomizeWindowHint|Qt::NoDropShadowWindowHint)
 {
-    MagnifierSize = QSize(qApp->desktop()->width()/12,qApp->desktop()->width()/12);
+    MagnifierSize = QSize(100,100);
     setFixedSize(MagnifierSize);
     setWindowOpacity(1);
     c_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
-    desktopPixmap = std::make_shared<QPixmap>(c_simpleWindow->desktopPixmap);
-
+   // desktopPixmap = std::make_shared<QPixmap>(c_simpleWindow->desktopPixmap);
+    QDesktopWidget *desktop = QApplication::desktop();
+    desktopPixmap = std::make_shared<QPixmap>(qApp->primaryScreen()->grabWindow(desktop->winId(), desktop->geometry().x(),
+                                                      desktop->geometry().y(), desktop->geometry().width(),
+                                                      desktop->geometry().height()));
     connect(c_simpleWindow, &SimpleWindow::resizeSimpleWindow, [=](QResizeEvent *event){
         this->ParentSize = event->size();
     });
@@ -43,12 +46,13 @@ void Magnifier::magnifierMove(QPoint *globalMousePos)
 
     this->move(newX, newY);
     this->repaint();
+    this->raise();
 }
 
 void Magnifier::paintEvent(QPaintEvent *event)
 {
 
-    QPoint scaledCoefficient(this->size().width()/6,this->size().height()/6);
+    QPoint scaledCoefficient(this->size().width()/5,this->size().height()/5);
     QRect scaledRect(QCursor::pos()-scaledCoefficient,QCursor::pos()+scaledCoefficient);
     QPixmap zoomPixmap = desktopPixmap->copy(scaledRect).scaled(this->size(), Qt::IgnoreAspectRatio);
 
@@ -56,7 +60,7 @@ void Magnifier::paintEvent(QPaintEvent *event)
     QPoint drawPoint = QPoint(0,0);
     paint.drawPixmap(drawPoint, zoomPixmap);
 
-    paint.setPen( QPen(QBrush( QColor(255, 0, 0, 0) ), 2) );
+    paint.setPen( QPen(QBrush( QColor(Qt::black) ), 2) );
     paint.drawRect(this->rect());
     drawPoint = this->rect().center()/*-QPoint(4,-4)*/;
     paint.drawText(drawPoint,"+");

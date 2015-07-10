@@ -110,7 +110,6 @@ void SimpleWindow::initialConfigurationWidget()
     setCursor(Qt::CrossCursor);
     widgetCreated = false;
     isWidgetResizeble = false;
-    getDesktopPixmap();
 }
 
 void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetResizable)
@@ -135,14 +134,6 @@ void SimpleWindow::closeEvent(QCloseEvent *event)
     if(chekBox)
     panel.reset();
     magnifier.reset();
-}
-
-void SimpleWindow::getDesktopPixmap()
-{
-    QDesktopWidget *desktop = QApplication::desktop();
-    desktopPixmap = qApp->primaryScreen()->grabWindow(desktop->winId(), desktop->geometry().x(),
-                                                      desktop->geometry().y(), desktop->geometry().width(),
-                                                      desktop->geometry().height());
 }
 
 void SimpleWindow::setWidth(int w)
