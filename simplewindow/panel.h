@@ -33,6 +33,7 @@ private slots:
     void cancelBtnPressed();
     void comBoxSelection(int activated);
     void setLockButtonIcon(bool state);
+    void chekLockerAndResize();
 protected:
     void closeEvent(QCloseEvent *event);
 };

@@ -34,9 +34,8 @@ Panel::Panel(QWidget *parent) :
     connect(ui->CropButton, SIGNAL(pressed()), this, SLOT(cropBtnPressed()));
     connect(ui->comboBox, SIGNAL(activated(int)),this,SLOT(comBoxSelection(int)));
 
-    connect(ui->widthSpinBox,SIGNAL(valueChanged(int)),m_simpleWindow,SLOT(setWidth(int)));
-    connect(ui->heightSpinBox, SIGNAL(valueChanged(int)),m_simpleWindow, SLOT(setHeight(int)));
-
+    connect(ui->widthSpinBox, SIGNAL(valueChanged(int)), this, SLOT(chekLockerAndResize()));
+    connect(ui->heightSpinBox, SIGNAL(valueChanged(int)), this, SLOT(chekLockerAndResize()));
 
     connect(ui->lockButton,SIGNAL(clicked(bool)),this,SLOT(setLockButtonIcon(bool)));
 
@@ -113,14 +112,31 @@ void Panel::settingLockButton()
 {
     ui->lockButton->setFlat(true);
     ui->lockButton->setAutoFillBackground(true);
-    ui->lockButton->setIcon(QIcon(":/icons/lock.png"));
+    ui->lockButton->setIcon(QIcon(":/icons/un_lock.png"));
 }
 
 void Panel::setLockButtonIcon(bool state)
 {
     if(state){
-        ui->lockButton->setIcon(QIcon(":/icons/un_lock.png"));
-    }else{
         ui->lockButton->setIcon(QIcon(":/icons/lock.png"));
+    }else{
+        ui->lockButton->setIcon(QIcon(":/icons/un_lock.png"));
     }
+}
+
+void Panel::chekLockerAndResize()
+{
+    if (ui->lockButton->isChecked())
+    {
+        qDebug()<<"in locker";
+        int h = m_simpleWindow->size().height();
+        int w = m_simpleWindow->size().width();
+        int nw = ui->widthSpinBox->value();
+        int nh = ui->heightSpinBox->value();
+        if (w!=nw && w!=0)
+            ui->heightSpinBox->setValue(h*nw/w);
+        else if (h!=0)
+            ui->widthSpinBox->setValue(w*nh/h);
+    }
+    m_simpleWindow->resize(ui->widthSpinBox->value(),ui->heightSpinBox->value());
 }
