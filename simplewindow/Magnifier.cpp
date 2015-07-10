@@ -17,7 +17,10 @@ Magnifier::Magnifier(QWidget *parent)
                                                       desktop->geometry().height()));
 
     connect(c_simpleWindow, &SimpleWindow::resizeSimpleWindow, [=](QResizeEvent *event){
-        this->ParentSize = event->size();
+
+        QString sizeStr;
+        QTextStream(&sizeStr)<<event->size().width()<<" x "<<event->size().height();
+        labelSize->setText(sizeStr);
     });
 
     this->show();
@@ -29,13 +32,14 @@ Magnifier::~Magnifier()
 
 void Magnifier::settingSizeLabel()
 {
-    labelSize = new QLabel();
+    labelSize = new QLabel(this);
     labelSize->setLineWidth(0);
     labelSize->setStyleSheet("background-color: gray;""color: white;");
 
     labelLayout = new QVBoxLayout;
     labelLayout->addWidget(labelSize);
     this->setLayout(labelLayout);
+    labelLayout->setAlignment(Qt::AlignHCenter|Qt::AlignBottom);
     labelLayout->setAlignment(Qt::AlignHCenter|Qt::AlignBottom);
 
 }
@@ -78,11 +82,6 @@ void Magnifier::paintEvent(QPaintEvent *event)
 
     paint.setPen( QPen(QBrush( QColor(Qt::black) ), 2) );
     paint.drawRect(this->rect());
-
-    QString sizeStr;
-    QTextStream(&sizeStr)<<ParentSize.width()<<" x "<<ParentSize.height();
-    qDebug()<<sizeStr;
-    labelSize->setText(sizeStr);
 
     drawPoint = this->rect().center();
     paint.drawText(drawPoint,"+");
