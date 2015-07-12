@@ -134,7 +134,6 @@ void Panel::chekLockerAndResize()
 {
     if (ui->lockButton->isChecked())
     {
-        qDebug()<<"in locker";
         int h = m_simpleWindow->size().height();
         int w = m_simpleWindow->size().width();
         int nw = ui->widthSpinBox->value();
