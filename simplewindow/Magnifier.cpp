@@ -34,14 +34,17 @@ void Magnifier::settingSizeLabel()
 {
     labelSize = new QLabel(this);
     labelSize->setLineWidth(0);
-    labelSize->setStyleSheet("background-color: gray;""color: white;");
+    labelSize->setStyleSheet("background-color: black;""color: white;");
+    labelSize->setAlignment(Qt::AlignHCenter|Qt::AlignBottom);
+    labelSize->setFixedWidth(this->width());
 
     labelLayout = new QVBoxLayout;
     labelLayout->addWidget(labelSize);
     this->setLayout(labelLayout);
-    labelLayout->setAlignment(Qt::AlignHCenter|Qt::AlignBottom);
-    labelLayout->setAlignment(Qt::AlignHCenter|Qt::AlignBottom);
+    labelLayout->setContentsMargins(0,0,0,0);
 
+    labelLayout->setAlignment(Qt::AlignHCenter|Qt::AlignBottom);
+    labelLayout->setAlignment(Qt::AlignHCenter|Qt::AlignBottom);
 }
 
 void Magnifier::magnifierMove(QPoint *globalMousePos)
@@ -80,10 +83,24 @@ void Magnifier::paintEvent(QPaintEvent *event)
     QPoint drawPoint = QPoint(0,0);
     paint.drawPixmap(drawPoint, zoomPixmap);
 
-    paint.setPen( QPen(QBrush( QColor(Qt::black) ), 2) );
-    paint.drawRect(this->rect());
+    QRect rectPaint = this->rect();
+    QPen whitePen(QBrush( QColor(Qt::white) ), 1);
+    QPen blackPen (QBrush( QColor(Qt::black) ), 2);
+    paint.setPen(blackPen);
+    paint.drawRect(rectPaint);
+    rectPaint = QRect(rectPaint.topLeft()+QPoint(1,1), rectPaint.size()-QSize(3,2+labelSize->height()));
+    paint.setPen(whitePen);
+    paint.drawRect(rectPaint);
 
-    drawPoint = this->rect().center();
-    paint.drawText(drawPoint,"+");
+    blackPen.setWidth(1);
+    paint.setPen(blackPen);
+    rectPaint = QRect(this->rect().center()-QPoint(10,10), QSize(20,20));
+    paint.drawRect(rectPaint);
+    whitePen.setWidth(1);
+    paint.setPen(whitePen);
+    rectPaint = QRect(rectPaint.topLeft()+QPoint(1,1), rectPaint.size()-QSize(2,2));
+    paint.drawRect(rectPaint);
+
+
 }
 

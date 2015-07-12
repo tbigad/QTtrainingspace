@@ -28,6 +28,8 @@ private:
     void fillComboBox();
     void settingSpinBox();
     void settingLockButton();
+    void settingWidgetPosition();
+    double segmentLenght(int aX, int aY, int bX, int bY);
 private slots:
     void cropBtnPressed();
     void cancelBtnPressed();
