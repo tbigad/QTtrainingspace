@@ -121,12 +121,16 @@ void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetR
     if(chekBox)
     {
         panel = std::make_shared<Panel>(this);
+    }else {
+        setChekBoxState(false);
     }
 }
 
 void SimpleWindow::setChekBoxState(bool chekBoxState)
 {
     chekBox = chekBoxState;
+    if(!chekBoxState)
+    emit createPanelWidget(chekBox);
 }
 
 void SimpleWindow::closeEvent(QCloseEvent *event)
@@ -147,5 +151,14 @@ void SimpleWindow::setHeight(int h)
 }
 
 
-
+void SimpleWindow::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+    case Qt::Key_Escape:
+        this->close();
+        break;
+    default:
+        break;
+    }
+}
 

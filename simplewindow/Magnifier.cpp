@@ -4,7 +4,7 @@
 Magnifier::Magnifier(QWidget *parent)
     : QWidget(parent, Qt::Window|Qt::FramelessWindowHint|Qt::CustomizeWindowHint|Qt::NoDropShadowWindowHint)
 {
-    MagnifierSize = QSize(100,100);
+    MagnifierSize = QSize(100,121);
     setFixedSize(MagnifierSize);
     setWindowOpacity(1);
     c_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
@@ -35,8 +35,11 @@ void Magnifier::settingSizeLabel()
     labelSize = new QLabel(this);
     labelSize->setLineWidth(0);
     labelSize->setStyleSheet("background-color: black;""color: white;");
-    labelSize->setAlignment(Qt::AlignHCenter|Qt::AlignBottom);
+    labelSize->setAlignment(Qt::AlignHCenter|Qt::AlignCenter);
     labelSize->setFixedWidth(this->width());
+    labelSize->setFrameShape(QFrame::HLine);
+    labelSize->setFrameStyle(QFrame::NoFrame);
+    labelSize->setFixedHeight(20);
 
     labelLayout = new QVBoxLayout;
     labelLayout->addWidget(labelSize);

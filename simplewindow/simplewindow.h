@@ -42,6 +42,7 @@ private:
 
 signals:
     void resizeSimpleWindow(QResizeEvent *event);
+    void createPanelWidget(bool panelWidg);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -50,6 +51,7 @@ protected:
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 
 public slots:
      void setWidth(int w);

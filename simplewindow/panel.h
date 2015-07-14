@@ -38,6 +38,7 @@ private slots:
     void chekLockerAndResize();
 protected:
     void closeEvent(QCloseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // PANEL_H

@@ -17,13 +17,13 @@ Panel::Panel(QWidget *parent) :
         ui->heightSpinBox->setValue(event->size().height());
     });
 
-    //qDebug()<< "ParentWi in Panel" <<parentWi->isEnabled() <<parentWi<<"parent in Panel: "<< parent;
     ui->setupUi(this);
 
     mFrameless->activateOn(this);
     mFrameless->setWidgetMovable(true);
+    FullScreenHelper::MaximizeOnVirtualScreen(this);
 
-    setWindowFlags(Qt::Drawer|Qt::CustomizeWindowHint);
+    setWindowFlags(Qt::Drawer|Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
     settingWidgetPosition();
 
     fillComboBox();
@@ -56,6 +56,7 @@ void Panel::cropBtnPressed()
 {
     qDebug()<< "Crop button pressed!!!";
     this->close();
+    m_simpleWindow->setChekBoxState(false);
 
 }
 
@@ -104,8 +105,8 @@ void Panel::comBoxSelection(int activated)
 
 void Panel::settingSpinBox()
 {
-   ui->widthSpinBox->setMinimum(0);
-   ui->heightSpinBox->setMinimum(0);
+   ui->widthSpinBox->setMinimum(1);
+   ui->heightSpinBox->setMinimum(1);
    ui->widthSpinBox->setMaximum(qApp->desktop()->width());
    ui->heightSpinBox->setMaximum(qApp->desktop()->height());
 
@@ -148,15 +149,9 @@ void Panel::chekLockerAndResize()
 
 void Panel::settingWidgetPosition()
 {
-    QPoint cursor = QCursor::pos();
     QRect desktopGeometry = qApp->desktop()->geometry();
     QPoint posOnDesktop = desktopGeometry.topLeft();
     this->move(posOnDesktop);
-
-    union angle{
-        int i;
-        double value;
-    } an;
 
     double win[4];
     win[0] = segmentLenght(qApp->desktop()->geometry().topLeft().x(),qApp->desktop()->geometry().topLeft().y(),
@@ -215,4 +210,15 @@ void Panel::settingWidgetPosition()
 double Panel::segmentLenght(int aX, int aY, int bX, int bY)
 {
     return sqrt(pow(static_cast<double>(bX-aX),2)+pow(static_cast<double>(bY-aY),2));
+}
+
+void Panel::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+    case Qt::Key_Escape:
+        this->close();
+        break;
+    default:
+        break;
+    }
 }
