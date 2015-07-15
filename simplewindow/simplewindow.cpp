@@ -47,7 +47,7 @@ void SimpleWindow::mouseReleaseEvent(QMouseEvent *event)
         return;
     }
 
-      if((this->size().height()< 10) || (this->size().width()< 10) || (isWidgetResizeble == false) )
+    if((this->size().height()< 10) || (this->size().width()< 10) || (isWidgetResizeble == false) )
     {
         initialConfigurationWidget();
         magnifier->close();
@@ -118,10 +118,11 @@ void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetR
     mFrameless->setWidgetMovable(setWidgetMovable);
     mFrameless->setWidgetResizable(setWidgetResizable);
     widgetCreated = true;
-    if(chekBox)
-    {
+
+    if(chekBox) {
         panel = std::make_shared<Panel>(this);
-    }else {
+    }
+    else {
         setChekBoxState(false);
     }
 }
@@ -129,15 +130,15 @@ void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetR
 void SimpleWindow::setChekBoxState(bool chekBoxState)
 {
     chekBox = chekBoxState;
-    if(!chekBoxState)
-    emit onGrabed(chekBox);
 }
 
 void SimpleWindow::closeEvent(QCloseEvent *event)
 {
     if(chekBox)
-    panel.reset();
-    magnifier.reset();
+    {
+        panel.reset();
+        magnifier.reset();
+    }
 }
 
 void SimpleWindow::setWidth(int w)
@@ -150,6 +151,10 @@ void SimpleWindow::setHeight(int h)
     this->setGeometry(QRect(this->geometry().topLeft(),QSize(this->width(),h)));
 }
 
+void SimpleWindow::setGrabed()
+{
+    emit onGrabed("All good!");
+}
 
 void SimpleWindow::keyPressEvent(QKeyEvent *event)
 {

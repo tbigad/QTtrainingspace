@@ -24,25 +24,25 @@ public:
    ~SimpleWindow();
     void setChekBoxState(bool chekBoxState);
 private:
-    FramelessHelper* mFrameless;
-    std::shared_ptr<Magnifier> magnifier;
-    std::shared_ptr<Panel> panel;
+    FramelessHelper* m_Frameless;
+    std::shared_ptr<Magnifier> m_magnifier;
+    std::shared_ptr<Panel> m_panel;
     void setSizeWidget(QPoint moveMousePos);
 
-    QPoint mStartDragPos;
+    QPoint m_StartDragPos;
 
-    bool mLeftBtnPressed;
-    bool widgetCreated;
-    bool isWidgetResizeble;
+    bool m_LeftBtnPressed;
+    bool m_widgetCreated;
+    bool m_isWidgetResizeble;
 
-    bool chekBox;
+    bool m_chekBox;
 
     void initialConfigurationWidget();
     void secondarySettingWidget(bool setWidgetMovable, bool setWidgetResizable);
 
 signals:
     void resizeSimpleWindow(QResizeEvent *event);
-    void onGrabed(bool panelWidg);
+    void onGrabed(QString text);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -56,6 +56,7 @@ protected:
 public slots:
      void setWidth(int w);
      void setHeight(int h);
+     void setGrabed();
 };
 
 #endif // SIMPLEWINDOW_H

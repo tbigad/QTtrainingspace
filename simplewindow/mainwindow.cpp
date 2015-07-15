@@ -24,15 +24,13 @@ void MainWindow::on_pushButton_clicked()
     win->setChekBoxState(ui->checkBox->isChecked());
     win->show();
 
-    connect(win.get(),&SimpleWindow::onGrabed, [=](bool msg){
-        if(!msg){QMessageBox msgBox(win.get());
-        msgBox.setText("This a text");
+    connect(win.get(), &SimpleWindow::onGrabed, [=](QString text)
+    {
+        QMessageBox msgBox(win.get());
+        msgBox.setText(text);
         msgBox.exec();
-        msgBox.show();}
-
-        win->close();
+        msgBox.show();
     });
-
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {

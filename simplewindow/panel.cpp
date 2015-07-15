@@ -21,6 +21,8 @@ Panel::Panel(QWidget *parent) :
 
     mFrameless->activateOn(this);
     mFrameless->setWidgetMovable(true);
+    mFrameless->setWidgetResizable(false);
+
     FullScreenHelper::MaximizeOnVirtualScreen(this);
 
     setWindowFlags(Qt::Drawer|Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
@@ -56,8 +58,7 @@ void Panel::cropBtnPressed()
 {
     qDebug()<< "Crop button pressed!!!";
     this->close();
-    m_simpleWindow->setChekBoxState(false);
-
+    m_simpleWindow->setGrabed();
 }
 
 void Panel::cancelBtnPressed()
