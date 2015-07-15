@@ -47,7 +47,7 @@ void SimpleWindow::mouseReleaseEvent(QMouseEvent *event)
         return;
     }
 
-    if(!m_chekBox)
+    if(m_autoClose)
     {
         m_magnifier->close();
         this->setGrabed();
@@ -126,22 +126,22 @@ void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetR
     m_Frameless->setWidgetResizable(setWidgetResizable);
     m_widgetCreated = true;
 
-    if(m_chekBox) {
+    if(!m_autoClose) {
         m_panel = std::make_shared<Panel>(this);
     }
     else {
-        setChekBoxState(false);
+        setAutoClose(true);
     }
 }
 
-void SimpleWindow::setChekBoxState(bool chekBoxState)
+void SimpleWindow::setAutoClose(bool autoclose)
 {
-    m_chekBox = chekBoxState;
+    m_autoClose = autoclose;
 }
 
 void SimpleWindow::closeEvent(QCloseEvent *event)
 {
-    if(m_chekBox)
+    if(!m_autoClose)
     {
         m_panel.reset();
         m_magnifier.reset();

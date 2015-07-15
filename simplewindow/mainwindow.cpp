@@ -21,7 +21,7 @@ void MainWindow::on_pushButton_clicked()
         win.reset();
 
     win = std::make_shared<SimpleWindow>();
-    win->setChekBoxState(ui->checkBox->isChecked());
+    win->setAutoClose(!ui->checkBox->isChecked());
     win->show();
 
     connect(win.get(), &SimpleWindow::onGrabed, [=](QString text)

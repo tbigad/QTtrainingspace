@@ -22,7 +22,7 @@ class SimpleWindow: public QWidget
 public:
     explicit SimpleWindow(QWidget *parent = 0);
    ~SimpleWindow();
-    void setChekBoxState(bool chekBoxState);
+    void setAutoClose(bool chekBoxState);
 
 private:
     FramelessHelper* m_Frameless;
@@ -34,7 +34,7 @@ private:
     bool m_LeftBtnPressed;
     bool m_widgetCreated;
     bool m_isWidgetResizeble;
-    bool m_chekBox;
+    bool m_autoClose;
 
     void setSizeWidget(QPoint moveMousePos);
     void initialConfigurationWidget();
