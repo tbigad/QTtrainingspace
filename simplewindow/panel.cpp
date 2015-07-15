@@ -8,7 +8,7 @@
 
 Panel::Panel(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Panel), mFrameless(new FramelessHelper)
+    ui(new Ui::Panel), m_Frameless(new FramelessHelper)
 {
     m_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
 
@@ -19,9 +19,9 @@ Panel::Panel(QWidget *parent) :
 
     ui->setupUi(this);
 
-    mFrameless->activateOn(this);
-    mFrameless->setWidgetMovable(true);
-    mFrameless->setWidgetResizable(false);
+    m_Frameless->activateOn(this);
+    m_Frameless->setWidgetMovable(true);
+    m_Frameless->setWidgetResizable(false);
 
     FullScreenHelper::MaximizeOnVirtualScreen(this);
 

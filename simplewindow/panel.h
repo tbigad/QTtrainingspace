@@ -23,7 +23,7 @@ public:
 private:
     Ui::Panel *ui;
     SimpleWindow *m_simpleWindow;
-    FramelessHelper* mFrameless;
+    FramelessHelper* m_Frameless;
 
     void fillComboBox();
     void settingSpinBox();
