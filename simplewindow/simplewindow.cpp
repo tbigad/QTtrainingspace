@@ -130,7 +130,7 @@ void SimpleWindow::setChekBoxState(bool chekBoxState)
 {
     chekBox = chekBoxState;
     if(!chekBoxState)
-    emit createPanelWidget(chekBox);
+    emit onGrabed(chekBox);
 }
 
 void SimpleWindow::closeEvent(QCloseEvent *event)

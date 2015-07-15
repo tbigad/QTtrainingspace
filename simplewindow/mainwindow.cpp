@@ -23,8 +23,8 @@ void MainWindow::on_pushButton_clicked()
     win = std::make_shared<SimpleWindow>();
     win->setChekBoxState(ui->checkBox->isChecked());
     win->show();
-    connect(win.get(),&SimpleWindow::createPanelWidget, [=](bool msg){
 
+    connect(win.get(),&SimpleWindow::onGrabed, [=](bool msg){
         if(!msg){QMessageBox msgBox(win.get());
         msgBox.setText("This a text");
         msgBox.exec();
