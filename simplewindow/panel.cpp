@@ -57,8 +57,8 @@ void Panel::closeEvent(QCloseEvent *event)
 void Panel::cropBtnPressed()
 {
     qDebug()<< "Crop button pressed!!!";
-    this->close();
     m_simpleWindow->setGrabed();
+    this->close();
 }
 
 void Panel::cancelBtnPressed()

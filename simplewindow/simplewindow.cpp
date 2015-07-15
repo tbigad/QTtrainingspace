@@ -2,7 +2,7 @@
 
 SimpleWindow::SimpleWindow(QWidget *parent)
     : QWidget(parent, Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint|Qt::CustomizeWindowHint|Qt::NoDropShadowWindowHint),
-      mFrameless(new FramelessHelper)
+      m_Frameless(new FramelessHelper)
 {
     initialConfigurationWidget();
 }
@@ -13,14 +13,14 @@ SimpleWindow::~SimpleWindow()
 
 void SimpleWindow::mousePressEvent(QMouseEvent *event)
 {
-    mLeftBtnPressed = true;
+    m_LeftBtnPressed = true;
     switch (event->button()) {
     case Qt::LeftButton:
-        if(widgetCreated){
+        if(m_widgetCreated){
             return;
         }
-        mStartDragPos = event->globalPos();
-        magnifier = std::make_shared<Magnifier>(this);
+        m_StartDragPos = event->globalPos();
+        m_magnifier = std::make_shared<Magnifier>(this);
         break;
     case Qt::RightButton:
         this->close();
@@ -32,58 +32,65 @@ void SimpleWindow::mousePressEvent(QMouseEvent *event)
 
 void SimpleWindow::mouseMoveEvent(QMouseEvent *event)
 {
-    if(widgetCreated)
+    if(m_widgetCreated)
         return;
 
-    if(mLeftBtnPressed) {
+    if(m_LeftBtnPressed) {
         setSizeWidget(event->globalPos());
     }
 }
 
 void SimpleWindow::mouseReleaseEvent(QMouseEvent *event)
 {
-    mLeftBtnPressed = false;
-    if(widgetCreated){
+    m_LeftBtnPressed = false;
+    if(m_widgetCreated) {
         return;
     }
 
-    if((this->size().height()< 10) || (this->size().width()< 10) || (isWidgetResizeble == false) )
+    if(!m_chekBox)
+    {
+        m_magnifier->close();
+        this->setGrabed();
+        this->close();
+    }
+
+    if((this->size().height() < 10) || (this->size().width() < 10) || (m_isWidgetResizeble == false) )
     {
         initialConfigurationWidget();
-        magnifier->close();
+        m_magnifier->close();
         return;
     }
-    if (isWidgetResizeble){
-        magnifier->close();
+    if (m_isWidgetResizeble){
+        m_magnifier->close();
         secondarySettingWidget(true,true);
     }
 }
 
 void SimpleWindow::setSizeWidget(QPoint moveMousePos)
 {
-    if(widgetCreated)
+    if(m_widgetCreated)
         return;
 
     setWindowOpacity(0.5);
     QPoint topLeft, bottonRight;
-    topLeft = mStartDragPos;
+    topLeft = m_StartDragPos;
     bottonRight = moveMousePos;
     if(topLeft.x()>bottonRight.x())
     {
          topLeft.setX(bottonRight.x());
-         bottonRight.setX(mStartDragPos.x());
+         bottonRight.setX(m_StartDragPos.x());
     }
     if(topLeft.y()>bottonRight.y())
     {
         topLeft.setY(bottonRight.y());
-        bottonRight.setY(mStartDragPos.y());
+        bottonRight.setY(m_StartDragPos.y());
     }
 
-    isWidgetResizeble = true;
+    m_isWidgetResizeble = true;
     QRect initRect(topLeft,bottonRight);
     setGeometry(initRect);
 
-    magnifier->magnifierMove(&moveMousePos);
+    m_magnifier->magnifierMove(&moveMousePos);
 }
 
 void SimpleWindow::paintEvent(QPaintEvent *event)
@@ -108,19 +115,19 @@ void SimpleWindow::initialConfigurationWidget()
     FullScreenHelper::MaximizeOnVirtualScreen(this);
     setWindowOpacity(0.1);
     setCursor(Qt::CrossCursor);
-    widgetCreated = false;
-    isWidgetResizeble = false;
+    m_widgetCreated = false;
+    m_isWidgetResizeble = false;
 }
 
 void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetResizable)
 {
-    mFrameless->activateOn(this);
-    mFrameless->setWidgetMovable(setWidgetMovable);
-    mFrameless->setWidgetResizable(setWidgetResizable);
-    widgetCreated = true;
+    m_Frameless->activateOn(this);
+    m_Frameless->setWidgetMovable(setWidgetMovable);
+    m_Frameless->setWidgetResizable(setWidgetResizable);
+    m_widgetCreated = true;
 
-    if(chekBox) {
-        panel = std::make_shared<Panel>(this);
+    if(m_chekBox) {
+        m_panel = std::make_shared<Panel>(this);
     }
     else {
         setChekBoxState(false);
@@ -129,15 +136,15 @@ void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetR
 
 void SimpleWindow::setChekBoxState(bool chekBoxState)
 {
-    chekBox = chekBoxState;
+    m_chekBox = chekBoxState;
 }
 
 void SimpleWindow::closeEvent(QCloseEvent *event)
 {
-    if(chekBox)
+    if(m_chekBox)
     {
-        panel.reset();
-        magnifier.reset();
+        m_panel.reset();
+        m_magnifier.reset();
     }
 }
 

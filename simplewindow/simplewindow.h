@@ -23,20 +23,20 @@ public:
     explicit SimpleWindow(QWidget *parent = 0);
    ~SimpleWindow();
     void setChekBoxState(bool chekBoxState);
+
 private:
     FramelessHelper* m_Frameless;
     std::shared_ptr<Magnifier> m_magnifier;
     std::shared_ptr<Panel> m_panel;
-    void setSizeWidget(QPoint moveMousePos);
 
     QPoint m_StartDragPos;
 
     bool m_LeftBtnPressed;
     bool m_widgetCreated;
     bool m_isWidgetResizeble;
-
     bool m_chekBox;
 
+    void setSizeWidget(QPoint moveMousePos);
     void initialConfigurationWidget();
     void secondarySettingWidget(bool setWidgetMovable, bool setWidgetResizable);
 
