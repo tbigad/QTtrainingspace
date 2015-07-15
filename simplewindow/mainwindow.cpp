@@ -29,6 +29,8 @@ void MainWindow::on_pushButton_clicked()
         msgBox.setText("This a text");
         msgBox.exec();
         msgBox.show();}
+
+        win->close();
     });
 
 }

@@ -42,7 +42,7 @@ private:
 
 signals:
     void resizeSimpleWindow(QResizeEvent *event);
-    void createPanelWidget(bool panelWidg);
+    void onGrabed(bool panelWidg);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
