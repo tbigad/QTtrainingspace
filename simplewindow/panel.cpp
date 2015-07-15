@@ -139,9 +139,13 @@ void Panel::chekLockerAndResize()
         int w = m_simpleWindow->size().width();
         int nw = ui->widthSpinBox->value();
         int nh = ui->heightSpinBox->value();
-        if (w!=nw && w!=0)
+
+        qDebug()<<" h:"<<h<<" w:"<<w<<" nw:"<< nw << " nh:"<<nh <<" new Height"<< (h*nw/w) << " new Weight:"<< (w*nh/h);
+
+        if (w!=nw){
             ui->heightSpinBox->setValue(h*nw/w);
-        else if (h!=0)
+        }
+        else if (h!=nh)
             ui->widthSpinBox->setValue(w*nh/h);
     }
     m_simpleWindow->resize(ui->widthSpinBox->value(),ui->heightSpinBox->value());
