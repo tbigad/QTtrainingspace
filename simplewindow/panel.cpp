@@ -57,6 +57,7 @@ void Panel::closeEvent(QCloseEvent *event)
 void Panel::cropBtnPressed()
 {
     qDebug()<< "Crop button pressed!!!";
+    this->hide();
     m_simpleWindow->setGrabed();
     this->close();
 }
@@ -154,60 +155,31 @@ void Panel::chekLockerAndResize()
 
 void Panel::settingWidgetPosition()
 {
-    QRect desktopGeometry = qApp->desktop()->geometry();
+    QRect desktopGeometry = QApplication::desktop()->geometry();
     QPoint posOnDesktop = desktopGeometry.topLeft();
-    this->move(posOnDesktop);
-
-    double win[4];
-    win[0] = segmentLenght(qApp->desktop()->geometry().topLeft().x(),qApp->desktop()->geometry().topLeft().y(),
-                                 m_simpleWindow->geometry().topLeft().x(), m_simpleWindow->geometry().topLeft().y());
-    win[1] = segmentLenght(qApp->desktop()->geometry().topRight().x(),qApp->desktop()->geometry().topRight().y(),
-                             m_simpleWindow->geometry().topRight().x(), m_simpleWindow->geometry().topRight().y());
-    win[2] = segmentLenght(qApp->desktop()->geometry().bottomRight().x(),qApp->desktop()->geometry().bottomRight().y(),
-                                 m_simpleWindow->geometry().bottomRight().x(), m_simpleWindow->geometry().bottomRight().y());
-    win[3] = segmentLenght(qApp->desktop()->geometry().bottomLeft().x(),qApp->desktop()->geometry().bottomLeft().y(),
-                                 m_simpleWindow->geometry().bottomLeft().x(), m_simpleWindow->geometry().bottomLeft().y());
-
-    double panelDiagonal = segmentLenght(this->geometry().topLeft().x(),this->geometry().topLeft().y(),
-                                         this->geometry().bottomRight().x(), this->geometry().bottomRight().y());
-
-    for(int i = 0; i<4;i++)
-    {
-        qDebug()<< win[i];
-        if(win[i]>panelDiagonal)
-        {
-            switch (i) {
-            case 0:
-                posOnDesktop = qApp->desktop()->geometry().topLeft();
-                this->move(posOnDesktop);
-                return;
-            case 1:
-                posOnDesktop = qApp->desktop()->geometry().topRight();
-                posOnDesktop.setX(qApp->desktop()->geometry().topRight().x() - this->width());
-                this->move(posOnDesktop);
-                return;
-            case 2:
-                posOnDesktop.setX(desktopGeometry.bottomRight().x() - this->width());
-                posOnDesktop.setY(desktopGeometry.bottomRight().y() - this->height());
-                this->move(posOnDesktop);
-                return;
-            case 3:
-                posOnDesktop.setX(desktopGeometry.bottomLeft().x());
-                posOnDesktop.setY(desktopGeometry.bottomRight().y() - this->height());
-                this->move(posOnDesktop);
-                return;
-            }
-        }
-
-    }
 
     if (QCursor::pos().x()>(desktopGeometry.width()/2)) {
-        posOnDesktop.setX(desktopGeometry.right()-this->width());
+        if((desktopGeometry.right()-this->width())<((m_simpleWindow->geometry().right()+(desktopGeometry.right()-this->width()))/2))
+           posOnDesktop.setX(desktopGeometry.right()-this->width());
+        else
+            posOnDesktop.setX((m_simpleWindow->geometry().right()+(desktopGeometry.right()-this->width()))/2);
     }else if (QCursor::pos().x()<(desktopGeometry.width()/2)) {
-        posOnDesktop.setX(0);
+        if(desktopGeometry.left()>(m_simpleWindow->geometry().left()-this->width()))
+            posOnDesktop.setX(desktopGeometry.left());
+        else
+            posOnDesktop.setX((m_simpleWindow->geometry().left()-this->width())/2);
     }
     if(QCursor::pos().y()> (desktopGeometry.height()/2)){
-        posOnDesktop.setY(desktopGeometry.height() - this->height());
+        if(desktopGeometry.bottom()>(m_simpleWindow->geometry().bottom()+this->height()))
+            posOnDesktop.setY((m_simpleWindow->geometry().bottom()+(desktopGeometry.bottom()-this->height()))/2);
+        else
+            posOnDesktop.setY(desktopGeometry.height() - this->height());
+    }else if(QCursor::pos().y()<(desktopGeometry.height()/2))
+    {
+        if(desktopGeometry.top()<(m_simpleWindow->geometry().top()-this->height()))
+            posOnDesktop.setY((m_simpleWindow->geometry().top()-this->height())/2);
+        else
+            posOnDesktop.setY(desktopGeometry.top());
     }
   this->move(posOnDesktop);
 }

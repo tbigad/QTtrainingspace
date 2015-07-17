@@ -27,6 +27,7 @@ void MainWindow::on_pushButton_clicked()
     connect(win.get(), &SimpleWindow::onGrabed, [=](QString text)
     {
         QMessageBox msgBox(win.get());
+        win->hide();
         msgBox.setText(text);
         msgBox.exec();
         msgBox.show();
