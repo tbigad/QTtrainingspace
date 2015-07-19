@@ -42,7 +42,7 @@ private:
 
 signals:
     void resizeSimpleWindow(QResizeEvent *event);
-    void onGrabed(QString text);
+    void onGrabed(QSize rect);
 
 protected:
     void mousePressEvent(QMouseEvent *event);

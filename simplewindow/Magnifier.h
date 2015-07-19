@@ -32,7 +32,7 @@ private:
 
     QLabel *labelSize;
     QVBoxLayout *labelLayout;
-    void settingSizeLabel();
+    void initSizeLabel();
 
 signals:
 

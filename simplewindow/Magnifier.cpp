@@ -8,7 +8,7 @@ Magnifier::Magnifier(QWidget *parent)
     setFixedSize(MagnifierSize);
     c_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
 
-    settingSizeLabel();
+    initSizeLabel();
 
     QDesktopWidget *desktop = QApplication::desktop();
     desktopPixmap = std::make_shared<QPixmap>
@@ -27,7 +27,7 @@ Magnifier::~Magnifier()
 {
 }
 
-void Magnifier::settingSizeLabel()
+void Magnifier::initSizeLabel()
 {
     labelSize = new QLabel(this);
     labelSize->setLineWidth(0);
@@ -74,7 +74,6 @@ void Magnifier::magnifierMove(QPoint *globalMousePos)
 
 void Magnifier::paintEvent(QPaintEvent *event)
 {
-
     QPoint scaledCoefficient(this->size().width()/5,this->size().height()/5);
     QRect scaledRect(QCursor::pos()-scaledCoefficient,QCursor::pos()+scaledCoefficient);
     QPixmap zoomPixmap = desktopPixmap->copy(scaledRect).scaled(this->size(), Qt::IgnoreAspectRatio);

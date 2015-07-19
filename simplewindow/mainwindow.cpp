@@ -23,11 +23,11 @@ void MainWindow::on_pushButton_clicked()
     win->setAutoClose(!ui->checkBox->isChecked());
     win->show();
 
-    connect(win.get(), &SimpleWindow::onGrabed, [=](QString text)
+    connect(win.get(), &SimpleWindow::onGrabed, [=](QSize rect)
     {
         QMessageBox msgBox;
         win->close();
-        msgBox.setText(text);
+        msgBox.setText("done!");
         msgBox.exec();
         msgBox.show();
     });

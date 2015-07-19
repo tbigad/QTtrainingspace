@@ -6,7 +6,8 @@
 #include <cmath>
 #include <vector>
 
-#define IMAGE_LOCK "path1"
+#define IMAGE_UNLOCK ":/icons/un_lock.png"
+#define IMAGE_LOCK ":/icons/lock.png"
 
 Panel::Panel(QWidget *parent) :
     QWidget(parent),
@@ -125,15 +126,15 @@ void Panel::initImageSizeLockButton()
 {
     ui->lockButton->setFlat(true);
     ui->lockButton->setAutoFillBackground(true);
-    ui->lockButton->setIcon(QIcon(":/icons/un_lock.png"));
+    ui->lockButton->setIcon(QIcon(IMAGE_UNLOCK));
 }
 
 void Panel::setLockButtonIcon(bool state)
 {
     if(state){
-        ui->lockButton->setIcon(QIcon(":/icons/lock.png"));
+        ui->lockButton->setIcon(QIcon(IMAGE_LOCK));
     }else{
-        ui->lockButton->setIcon(QIcon(":/icons/un_lock.png"));
+        ui->lockButton->setIcon(QIcon(IMAGE_UNLOCK));
     }
 }
 
@@ -160,31 +161,7 @@ void Panel::settingWidgetPosition()
     QRect desktopGeometry = QApplication::desktop()->geometry();
     QPoint posOnDesktop((desktopGeometry.bottomRight()-QPoint(this->width()+20,this->height() + 20)));
 
-
-//    if (QCursor::pos().x()>(desktopGeometry.width()/2)) {
-//        if((desktopGeometry.right()-this->width())<((m_simpleWindow->geometry().right()+(desktopGeometry.right()-this->width()))/2))
-//           posOnDesktop.setX(desktopGeometry.right()-this->width());
-//        else
-//            posOnDesktop.setX((m_simpleWindow->geometry().right()+(desktopGeometry.right()-this->width()))/2);
-//    }else if (QCursor::pos().x()<(desktopGeometry.width()/2)) {
-//        if(desktopGeometry.left()>(m_simpleWindow->geometry().left()-this->width()))
-//            posOnDesktop.setX(desktopGeometry.left());
-//        else
-//            posOnDesktop.setX((m_simpleWindow->geometry().left()-this->width())/2);
-//    }
-//    if(QCursor::pos().y()> (desktopGeometry.height()/2)){
-//        if(desktopGeometry.bottom()>(m_simpleWindow->geometry().bottom()+this->height()))
-//            posOnDesktop.setY((m_simpleWindow->geometry().bottom()+(desktopGeometry.bottom()-this->height()))/2);
-//        else
-//            posOnDesktop.setY(desktopGeometry.height() - this->height());
-//    }else if(QCursor::pos().y()<(desktopGeometry.height()/2))
-//    {
-//        if(desktopGeometry.top()<(m_simpleWindow->geometry().top()-this->height()))
-//            posOnDesktop.setY((m_simpleWindow->geometry().top()-this->height())/2);
-//        else
-//            posOnDesktop.setY(desktopGeometry.top());
-//    }
-  this->move(posOnDesktop);
+    this->move(posOnDesktop);
 }
 
 void Panel::keyPressEvent(QKeyEvent *event)

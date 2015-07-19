@@ -14,17 +14,16 @@ SimpleWindow::~SimpleWindow()
 void SimpleWindow::mousePressEvent(QMouseEvent *event)
 {
     m_LeftBtnPressed = true;
-    switch (event->button()) {
-    case Qt::LeftButton:
+
+    if(event->button() == Qt::LeftButton) {
         if(m_widgetCreated)
             return;
 
         m_StartDragPos = event->globalPos();
         m_magnifier = std::make_shared<Magnifier>(this);
-        break;
-    default:
+    }
+    else {
         this->close();
-        break;
     }
 }
 
@@ -152,9 +151,7 @@ void SimpleWindow::setHeight(int h)
 
 void SimpleWindow::setGrabed()
 {
-    QString sizeStr;
-    QTextStream(&sizeStr)<<this->size().width()<<" x "<<this->size().height();
-    emit onGrabed(sizeStr);
+    emit onGrabed(size());
 }
 
 void SimpleWindow::keyPressEvent(QKeyEvent *event)
