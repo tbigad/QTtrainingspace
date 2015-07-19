@@ -1,5 +1,5 @@
-#ifndef PANEL_H
-#define PANEL_H
+#ifndef SIZEPANEL_H
+#define SIZEPANEL_H
 
 #include <QWidget>
 #include <FramelessHelper.h>
@@ -7,21 +7,21 @@
 #include <memory>
 
 namespace Ui {
-class Panel;
+class SizePanel;
 }
 
 class SimpleWindow;
 
-class Panel : public QWidget
+class SizePanel : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Panel(QWidget *parent);
-    ~Panel();
+    explicit SizePanel(QWidget *parent);
+    ~SizePanel();
 
 private:
-    Ui::Panel *ui;
+    Ui::SizePanel *ui;
     SimpleWindow *m_simpleWindow;
     FramelessHelper* m_Frameless;
 
@@ -42,4 +42,4 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 };
 
-#endif // PANEL_H
+#endif // SIZEPANEL_H

@@ -2,7 +2,7 @@
 #define SIMPLEWINDOW_H
 
 #include "FramelessHelper.h"
-#include "panel.h"
+#include "sizepanel.h"
 #include "Magnifier.h"
 #include "fullscreenhelper.h"
 
@@ -13,7 +13,7 @@
 #include <QDebug>
 #include <QScreen>
 
-class Panel;
+class SizePanel;
 class Magnifier;
 
 class SimpleWindow: public QWidget
@@ -27,7 +27,7 @@ public:
 private:
     FramelessHelper* m_Frameless;
     std::shared_ptr<Magnifier> m_magnifier;
-    std::shared_ptr<Panel> m_panel;
+    std::shared_ptr<SizePanel> m_panel;
 
     QPoint m_StartDragPos;
 

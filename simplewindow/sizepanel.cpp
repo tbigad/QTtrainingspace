@@ -1,5 +1,5 @@
-#include "panel.h"
-#include "ui_panel.h"
+#include "sizepanel.h"
+#include "ui_sizepanel.h"
 #include <QDesktopWidget>
 #include <QDebug>
 #include "FullscreenHelper.h"
@@ -9,9 +9,9 @@
 #define IMAGE_UNLOCK ":/icons/un_lock.png"
 #define IMAGE_LOCK ":/icons/lock.png"
 
-Panel::Panel(QWidget *parent) :
+SizePanel::SizePanel(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Panel), m_Frameless(new FramelessHelper)
+    ui(new Ui::SizePanel), m_Frameless(new FramelessHelper)
 {
     m_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
 
@@ -47,29 +47,29 @@ Panel::Panel(QWidget *parent) :
     this->show();
 }
 
-Panel::~Panel()
+SizePanel::~SizePanel()
 {
     delete ui;
 }
 
-void Panel::closeEvent(QCloseEvent *event)
+void SizePanel::closeEvent(QCloseEvent *event)
 {
   m_simpleWindow->close();
 }
 
-void Panel::cropBtnPressed()
+void SizePanel::cropBtnPressed()
 {
     this->hide();
     m_simpleWindow->setGrabed();
     this->close();
 }
 
-void Panel::cancelBtnPressed()
+void SizePanel::cancelBtnPressed()
 {
     this->close();
 }
 
-void Panel::initImageSizeComboBox()
+void SizePanel::initImageSizeComboBox()
 {
     ui->comboBox->addItem("Custom size...");
     ui->comboBox->addItem("(SD) 480p: 720x480");
@@ -80,7 +80,7 @@ void Panel::initImageSizeComboBox()
     ui->comboBox->addItem("(Ultra HD) 2160p: 3840x2160");
 }
 
-void Panel::comBoxSelection(int activated)
+void SizePanel::comBoxSelection(int activated)
 {
     QRect newRect(m_simpleWindow->geometry());
     switch (activated) {
@@ -110,7 +110,7 @@ void Panel::comBoxSelection(int activated)
 }
 
 
-void Panel::initImageSizeSpinBox()
+void SizePanel::initImageSizeSpinBox()
 {
    ui->widthSpinBox->setMinimum(1);
    ui->heightSpinBox->setMinimum(1);
@@ -122,14 +122,14 @@ void Panel::initImageSizeSpinBox()
    ui->heightSpinBox->setValue(m_simpleWindow->geometry().height());
 }
 
-void Panel::initImageSizeLockButton()
+void SizePanel::initImageSizeLockButton()
 {
     ui->lockButton->setFlat(true);
     ui->lockButton->setAutoFillBackground(true);
     ui->lockButton->setIcon(QIcon(IMAGE_UNLOCK));
 }
 
-void Panel::setLockButtonIcon(bool state)
+void SizePanel::setLockButtonIcon(bool state)
 {
     if(state){
         ui->lockButton->setIcon(QIcon(IMAGE_LOCK));
@@ -138,7 +138,7 @@ void Panel::setLockButtonIcon(bool state)
     }
 }
 
-void Panel::chekLockerAndResize()
+void SizePanel::chekLockerAndResize()
 {
     if (ui->lockButton->isChecked())
     {
@@ -156,7 +156,7 @@ void Panel::chekLockerAndResize()
     m_simpleWindow->resize(ui->widthSpinBox->value(),ui->heightSpinBox->value());
 }
 
-void Panel::settingWidgetPosition()
+void SizePanel::settingWidgetPosition()
 {
     QRect desktopGeometry = QApplication::desktop()->geometry();
     QPoint posOnDesktop((desktopGeometry.bottomRight()-QPoint(this->width()+20,this->height() + 20)));
@@ -164,7 +164,7 @@ void Panel::settingWidgetPosition()
     this->move(posOnDesktop);
 }
 
-void Panel::keyPressEvent(QKeyEvent *event)
+void SizePanel::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Escape){
         this->close();

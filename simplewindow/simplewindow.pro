@@ -17,18 +17,18 @@ SOURCES += main.cpp\
     simplewindow.cpp \
     FramelessHelper.cpp \
     FullscreenHelper.cpp \
-    panel.cpp \
+    sizepanel.cpp \
     Magnifier.cpp
 
 HEADERS  += mainwindow.h \
     simplewindow.h \
     FramelessHelper.h \
     FullscreenHelper.h \
-    panel.h \
+    sizepanel.h \
     Magnifier.h
 
 FORMS    += mainwindow.ui \
-    panel.ui
+    sizepanel.ui
 
 RESOURCES += \
     icons.qrc

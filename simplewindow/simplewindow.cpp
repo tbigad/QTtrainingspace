@@ -121,7 +121,7 @@ void SimpleWindow::secondarySettingWidget(bool setWidgetMovable, bool setWidgetR
     m_widgetCreated = true;
 
     if(!m_autoClose) {
-        m_panel = std::make_shared<Panel>(this);
+        m_panel = std::make_shared<SizePanel>(this);
     }
     else {
         setAutoClose(true);
