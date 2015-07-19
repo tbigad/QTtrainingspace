@@ -25,11 +25,10 @@ private:
     SimpleWindow *m_simpleWindow;
     FramelessHelper* m_Frameless;
 
-    void fillComboBox();
-    void settingSpinBox();
-    void settingLockButton();
+    void initImageSizeComboBox();
+    void initImageSizeSpinBox();
+    void initImageSizeLockButton();
     void settingWidgetPosition();
-    double segmentLenght(int aX, int aY, int bX, int bY);
 
 private slots:
     void cropBtnPressed();

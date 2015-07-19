@@ -6,6 +6,8 @@
 #include <cmath>
 #include <vector>
 
+#define IMAGE_LOCK "path1"
+
 Panel::Panel(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Panel), m_Frameless(new FramelessHelper)
@@ -28,9 +30,9 @@ Panel::Panel(QWidget *parent) :
     setWindowFlags(Qt::Drawer|Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
     settingWidgetPosition();
 
-    fillComboBox();
-    settingSpinBox();
-    settingLockButton();
+    initImageSizeComboBox();
+    initImageSizeSpinBox();
+    initImageSizeLockButton();
 
     connect(ui->CancelButton,SIGNAL(pressed()),this,SLOT(cancelBtnPressed()));
     connect(ui->CropButton, SIGNAL(pressed()), this, SLOT(cropBtnPressed()));
@@ -56,7 +58,6 @@ void Panel::closeEvent(QCloseEvent *event)
 
 void Panel::cropBtnPressed()
 {
-    qDebug()<< "Crop button pressed!!!";
     this->hide();
     m_simpleWindow->setGrabed();
     this->close();
@@ -67,13 +68,15 @@ void Panel::cancelBtnPressed()
     this->close();
 }
 
-void Panel::fillComboBox()
+void Panel::initImageSizeComboBox()
 {
     ui->comboBox->addItem("Custom size...");
     ui->comboBox->addItem("(SD) 480p: 720x480");
     ui->comboBox->addItem("(HD) 720p: 1280x720");
+    if(qApp->desktop()->geometry().contains(1920,1080))
     ui->comboBox->addItem("(Full HD) 1080p: 1920x1080");
-    ui->comboBox->addItem("(4k) 2160p: 3840x2160");
+    if(qApp->desktop()->geometry().contains(3840,2160))
+    ui->comboBox->addItem("(Ultra HD) 2160p: 3840x2160");
 }
 
 void Panel::comBoxSelection(int activated)
@@ -105,19 +108,20 @@ void Panel::comBoxSelection(int activated)
     }
 }
 
-void Panel::settingSpinBox()
+
+void Panel::initImageSizeSpinBox()
 {
    ui->widthSpinBox->setMinimum(1);
    ui->heightSpinBox->setMinimum(1);
+
    ui->widthSpinBox->setMaximum(qApp->desktop()->width());
    ui->heightSpinBox->setMaximum(qApp->desktop()->height());
 
    ui->widthSpinBox->setValue(m_simpleWindow->geometry().width());
    ui->heightSpinBox->setValue(m_simpleWindow->geometry().height());
-
 }
 
-void Panel::settingLockButton()
+void Panel::initImageSizeLockButton()
 {
     ui->lockButton->setFlat(true);
     ui->lockButton->setAutoFillBackground(true);
@@ -139,16 +143,14 @@ void Panel::chekLockerAndResize()
     {
         int h = m_simpleWindow->size().height();
         int w = m_simpleWindow->size().width();
-        int nw = ui->widthSpinBox->value();
-        int nh = ui->heightSpinBox->value();
+        int nW = ui->widthSpinBox->value();
+        int nH = ui->heightSpinBox->value();
 
-        qDebug()<<" h:"<<h<<" w:"<<w<<" nw:"<< nw << " nh:"<<nh <<" new Height"<< (h*nw/w) << " new Weight:"<< (w*nh/h);
-
-        if (w!=nw){
-            ui->heightSpinBox->setValue(h*nw/w);
+        if (w!=nW){
+            ui->heightSpinBox->setValue(h*nW/w);
         }
-        else if (h!=nh)
-            ui->widthSpinBox->setValue(w*nh/h);
+        else if (h!=nH)
+            ui->widthSpinBox->setValue(w*nH/h);
     }
     m_simpleWindow->resize(ui->widthSpinBox->value(),ui->heightSpinBox->value());
 }
@@ -156,46 +158,38 @@ void Panel::chekLockerAndResize()
 void Panel::settingWidgetPosition()
 {
     QRect desktopGeometry = QApplication::desktop()->geometry();
-    QPoint posOnDesktop = desktopGeometry.topLeft();
+    QPoint posOnDesktop((desktopGeometry.bottomRight()-QPoint(this->width()+20,this->height() + 20)));
 
-    if (QCursor::pos().x()>(desktopGeometry.width()/2)) {
-        if((desktopGeometry.right()-this->width())<((m_simpleWindow->geometry().right()+(desktopGeometry.right()-this->width()))/2))
-           posOnDesktop.setX(desktopGeometry.right()-this->width());
-        else
-            posOnDesktop.setX((m_simpleWindow->geometry().right()+(desktopGeometry.right()-this->width()))/2);
-    }else if (QCursor::pos().x()<(desktopGeometry.width()/2)) {
-        if(desktopGeometry.left()>(m_simpleWindow->geometry().left()-this->width()))
-            posOnDesktop.setX(desktopGeometry.left());
-        else
-            posOnDesktop.setX((m_simpleWindow->geometry().left()-this->width())/2);
-    }
-    if(QCursor::pos().y()> (desktopGeometry.height()/2)){
-        if(desktopGeometry.bottom()>(m_simpleWindow->geometry().bottom()+this->height()))
-            posOnDesktop.setY((m_simpleWindow->geometry().bottom()+(desktopGeometry.bottom()-this->height()))/2);
-        else
-            posOnDesktop.setY(desktopGeometry.height() - this->height());
-    }else if(QCursor::pos().y()<(desktopGeometry.height()/2))
-    {
-        if(desktopGeometry.top()<(m_simpleWindow->geometry().top()-this->height()))
-            posOnDesktop.setY((m_simpleWindow->geometry().top()-this->height())/2);
-        else
-            posOnDesktop.setY(desktopGeometry.top());
-    }
+
+//    if (QCursor::pos().x()>(desktopGeometry.width()/2)) {
+//        if((desktopGeometry.right()-this->width())<((m_simpleWindow->geometry().right()+(desktopGeometry.right()-this->width()))/2))
+//           posOnDesktop.setX(desktopGeometry.right()-this->width());
+//        else
+//            posOnDesktop.setX((m_simpleWindow->geometry().right()+(desktopGeometry.right()-this->width()))/2);
+//    }else if (QCursor::pos().x()<(desktopGeometry.width()/2)) {
+//        if(desktopGeometry.left()>(m_simpleWindow->geometry().left()-this->width()))
+//            posOnDesktop.setX(desktopGeometry.left());
+//        else
+//            posOnDesktop.setX((m_simpleWindow->geometry().left()-this->width())/2);
+//    }
+//    if(QCursor::pos().y()> (desktopGeometry.height()/2)){
+//        if(desktopGeometry.bottom()>(m_simpleWindow->geometry().bottom()+this->height()))
+//            posOnDesktop.setY((m_simpleWindow->geometry().bottom()+(desktopGeometry.bottom()-this->height()))/2);
+//        else
+//            posOnDesktop.setY(desktopGeometry.height() - this->height());
+//    }else if(QCursor::pos().y()<(desktopGeometry.height()/2))
+//    {
+//        if(desktopGeometry.top()<(m_simpleWindow->geometry().top()-this->height()))
+//            posOnDesktop.setY((m_simpleWindow->geometry().top()-this->height())/2);
+//        else
+//            posOnDesktop.setY(desktopGeometry.top());
+//    }
   this->move(posOnDesktop);
-}
-
-double Panel::segmentLenght(int aX, int aY, int bX, int bY)
-{
-    return sqrt(pow(static_cast<double>(bX-aX),2)+pow(static_cast<double>(bY-aY),2));
 }
 
 void Panel::keyPressEvent(QKeyEvent *event)
 {
-    switch (event->key()) {
-    case Qt::Key_Escape:
+    if(event->key() == Qt::Key_Escape){
         this->close();
-        break;
-    default:
-        break;
     }
 }

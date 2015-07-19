@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -26,8 +25,8 @@ void MainWindow::on_pushButton_clicked()
 
     connect(win.get(), &SimpleWindow::onGrabed, [=](QString text)
     {
-        QMessageBox msgBox(win.get());
-        win->hide();
+        QMessageBox msgBox;
+        win->close();
         msgBox.setText(text);
         msgBox.exec();
         msgBox.show();

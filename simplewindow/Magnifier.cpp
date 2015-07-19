@@ -6,18 +6,15 @@ Magnifier::Magnifier(QWidget *parent)
 {
     MagnifierSize = QSize(100,121);
     setFixedSize(MagnifierSize);
-    setWindowOpacity(1);
     c_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
 
     settingSizeLabel();
 
     QDesktopWidget *desktop = QApplication::desktop();
-    desktopPixmap = std::make_shared<QPixmap>(qApp->primaryScreen()->grabWindow(desktop->winId(), desktop->geometry().x(),
-                                                      desktop->geometry().y(), desktop->geometry().width(),
-                                                      desktop->geometry().height()));
+    desktopPixmap = std::make_shared<QPixmap>
+            (QPixmap::grabWindow(desktop->winId(), 0, 0, desktop->width(),desktop->height()));
 
     connect(c_simpleWindow, &SimpleWindow::resizeSimpleWindow, [=](QResizeEvent *event){
-
         QString sizeStr;
         QTextStream(&sizeStr)<<event->size().width()<<" x "<<event->size().height();
         labelSize->setText(sizeStr);
@@ -99,11 +96,8 @@ void Magnifier::paintEvent(QPaintEvent *event)
     paint.setPen(blackPen);
     rectPaint = QRect(this->rect().center()-QPoint(10,10), QSize(20,20));
     paint.drawRect(rectPaint);
-    whitePen.setWidth(1);
     paint.setPen(whitePen);
     rectPaint = QRect(rectPaint.topLeft()+QPoint(1,1), rectPaint.size()-QSize(2,2));
     paint.drawRect(rectPaint);
-
-
 }
 

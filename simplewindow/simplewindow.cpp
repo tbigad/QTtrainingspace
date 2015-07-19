@@ -16,17 +16,15 @@ void SimpleWindow::mousePressEvent(QMouseEvent *event)
     m_LeftBtnPressed = true;
     switch (event->button()) {
     case Qt::LeftButton:
-        if(m_widgetCreated){
+        if(m_widgetCreated)
             return;
-        }
+
         m_StartDragPos = event->globalPos();
         m_magnifier = std::make_shared<Magnifier>(this);
         break;
-    case Qt::RightButton:
+    default:
         this->close();
         break;
-    default:
-        return;
     }
 }
 
@@ -47,20 +45,19 @@ void SimpleWindow::mouseReleaseEvent(QMouseEvent *event)
         return;
     }
 
-    if(m_autoClose)
-    {
+    if(m_autoClose) {
         m_magnifier->close();
         this->setGrabed();
         this->close();
     }
 
-    if((this->size().height() < 10) || (this->size().width() < 10) || (m_isWidgetResizeble == false) )
-    {
+    if((this->size().height() < 10) || (this->size().width() < 10) || (m_isWidgetResizeble == false)) {
         initialConfigurationWidget();
         m_magnifier->close();
         return;
     }
-    if (m_isWidgetResizeble){
+
+    if (m_isWidgetResizeble) {
         m_magnifier->close();
         secondarySettingWidget(true,true);
     }
@@ -75,13 +72,12 @@ void SimpleWindow::setSizeWidget(QPoint moveMousePos)
     QPoint topLeft, bottonRight;
     topLeft = m_StartDragPos;
     bottonRight = moveMousePos;
-    if(topLeft.x()>bottonRight.x())
-    {
+
+    if(topLeft.x()>bottonRight.x()) {
          topLeft.setX(bottonRight.x());
          bottonRight.setX(m_StartDragPos.x());
     }
-    if(topLeft.y()>bottonRight.y())
-    {
+    if(topLeft.y()>bottonRight.y()) {
         topLeft.setY(bottonRight.y());
         bottonRight.setY(m_StartDragPos.y());
     }
@@ -98,7 +94,6 @@ void SimpleWindow::paintEvent(QPaintEvent *event)
     const QPen whitePen(Qt::white, 2);
 
     QPainter paint(this);
-    paint.setOpacity(1);
 
     paint.setPen(whitePen);
     QRectF rec(rect().topLeft(),size());
@@ -142,10 +137,7 @@ void SimpleWindow::setAutoClose(bool autoclose)
 void SimpleWindow::closeEvent(QCloseEvent *event)
 {
     if(!m_autoClose)
-    {
-        m_panel.reset();
-        m_magnifier.reset();
-    }
+        m_panel->close();
 }
 
 void SimpleWindow::setWidth(int w)
@@ -160,17 +152,14 @@ void SimpleWindow::setHeight(int h)
 
 void SimpleWindow::setGrabed()
 {
-    emit onGrabed("All good!");
+    QString sizeStr;
+    QTextStream(&sizeStr)<<this->size().width()<<" x "<<this->size().height();
+    emit onGrabed(sizeStr);
 }
 
 void SimpleWindow::keyPressEvent(QKeyEvent *event)
 {
-    switch (event->key()) {
-    case Qt::Key_Escape:
+    if(event->key() == Qt::Key_Escape)
         this->close();
-        break;
-    default:
-        break;
-    }
 }
 
