@@ -11,24 +11,22 @@
 
 SizePanel::SizePanel(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::SizePanel), m_Frameless(new FramelessHelper)
+    ui(new Ui::SizePanel),
+    m_Frameless(new FramelessHelper)
 {
-    m_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
+    ui->setupUi(this);
 
+    m_simpleWindow = dynamic_cast<SimpleWindow*>(parent);
     connect(m_simpleWindow, &SimpleWindow::resizeSimpleWindow, [=](QResizeEvent *event){
         ui->widthSpinBox->setValue(event->size().width());
         ui->heightSpinBox->setValue(event->size().height());
     });
 
-    ui->setupUi(this);
-
     m_Frameless->activateOn(this);
     m_Frameless->setWidgetMovable(true);
     m_Frameless->setWidgetResizable(false);
 
-    FullScreenHelper::MaximizeOnVirtualScreen(this);
-
-    setWindowFlags(Qt::Drawer|Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
+    setWindowFlags(Qt::Drawer | Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
     settingWidgetPosition();
 
     initImageSizeComboBox();
@@ -43,8 +41,6 @@ SizePanel::SizePanel(QWidget *parent) :
     connect(ui->heightSpinBox, SIGNAL(valueChanged(int)), this, SLOT(chekLockerAndResize()));
 
     connect(ui->lockButton,SIGNAL(clicked(bool)),this,SLOT(setLockButtonIcon(bool)));
-
-    this->show();
 }
 
 SizePanel::~SizePanel()
@@ -158,10 +154,11 @@ void SizePanel::chekLockerAndResize()
 
 void SizePanel::settingWidgetPosition()
 {
-    QRect desktopGeometry = QApplication::desktop()->geometry();
-    QPoint posOnDesktop((desktopGeometry.bottomRight()-QPoint(this->width()+20,this->height() + 20)));
-
-    this->move(posOnDesktop);
+    const int offset = 20;
+    auto geomerty = QApplication::desktop()->availableGeometry(QCursor::pos());
+    auto newPosisition = QPoint(geomerty.x() + geomerty.width()  - this->width()  - offset,
+                                geomerty.y() + geomerty.height() - this->height() - offset);
+    this->move(newPosisition);
 }
 
 void SizePanel::keyPressEvent(QKeyEvent *event)
