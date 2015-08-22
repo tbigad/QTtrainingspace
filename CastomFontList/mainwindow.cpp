@@ -15,12 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QStringList fonts;
     fonts <<"Arial"<<"Comic Sans MS"<<"Courier New"<<"Georgia"<<"Impact"<<"Times New Roman"
                             <<"Trebuchet MS"<<"Verdana";
-    ui->comboBox->setStyleSheet("border-radius: 4px;"
-                              "background-color: #3b3b3b;"
-                              "selection-background-color: #808080;"
-                              "color: #ffffff;"
-                              "font-size: 12pt;"
-                              "QComboBox::drop-down {border-width: 0px;} QComboBox::down-arrow {image: url(noimg); border-width: 0px;}");
     ui->comboBox->addItems(fonts);
     ui->comboBox->setMinimumWidth(200);
     ui->label->setText(ui->comboBox->currentText());
@@ -33,11 +27,6 @@ MainWindow::MainWindow(QWidget *parent) :
 //-----------------------------------------------------------------------------------------------------------
     QMenu *menu = new QMenu();
     ui->pushButton->setMenu(menu);
-    menu->setStyleSheet("border-radius: 4px;"
-                        "background-color: #3b3b3b;"
-                        "selection-background-color: #808080;"
-                        "color: #ffffff;"
-                        "font-size: 12pt;");
     QStringList list;
     list <<"Arial"<<"Comic Sans MS"<<"Courier New"<<"Georgia"<<"Impact"<<"Times New Roman"
             <<"Trebuchet MS"<<"Verdana";
