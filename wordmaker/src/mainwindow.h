@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QString>
+#include <QStringList>
+
 #include "ui_mainwindow.h"
 #include "xlsxdocument.h"
 
@@ -17,9 +20,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_btnFind_pressed();
+
 private:
-    QXlsx::Document* xlsx;
-    QXlsx::CellRange cell;
+    int findRow(QString& word);
+    QStringList getWordsList(int row);
+
+    QXlsx::Document* m_xlsx;
+    QXlsx::CellRange m_cell;
     Ui::MainWindow *ui;
 };
 

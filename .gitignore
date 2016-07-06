@@ -25,3 +25,4 @@ _start_msvc.bat
 */build-*
 */build/*
 *build-*
+*.autosave
